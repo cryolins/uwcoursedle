@@ -1,8 +1,52 @@
 @import "tailwindcss";
 
 @import "tw-animate-css";
+@import '@fontsource-variable/instrument-sans';
+@import '@fontsource-variable/public-sans';
 
 @custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-primary2: #f2d368;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Instrument Sans Variable";
+  font-weight: 600;
+}
+
+div, p, body {
+  font-family: "Public Sans Variable";
+  font-weight: 600;
+}
+
+.daily-course-text {
+  font-size: clamp(22px, 10vw, 64px);
+}
+
+/* scrollbars */
+.fg-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #a1a1aa transparent; /* thumb color track color */
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #a1a1aa;
+  border-radius: 5px;
+}
 
 :root {
   --radius: 0.625rem;
