@@ -8,11 +8,22 @@
 
 @theme inline {
   --color-primary2: #f2d368;
+  --color-primary2-dark: #E7bc28;
+  --color-word-match: #57ea83;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: "Instrument Sans Variable";
   font-weight: 600;
+}
+
+a {
+  text-decoration: underline;
+  color: var(--color-primary2-dark);
+  @apply transition-colors;
+}
+a:hover {
+  color: var(--color-primary2);
 }
 
 div, p, body {

@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { ChartColumn, CircleQuestionMark } from '@lucide/svelte';
+	import HowToPlay from '$lib/components/HowToPlay.svelte';
+    import { ChartColumn } from '@lucide/svelte';
 </script>
 
 <div class="flex w-full h-screen bg-zinc-800 justify-center items-center text-white">
@@ -14,7 +15,7 @@
 
             <!-- dialog-opening icons TODO dialog components -->
             <div class="flex flex-row w-fit h-full gap-2 sm:gap-4">
-                <CircleQuestionMark class="size-10"/>
+                <HowToPlay />
                 <ChartColumn class="size-10"/>
             </div>
         </div>
