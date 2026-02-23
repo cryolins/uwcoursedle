@@ -13,7 +13,7 @@ embeddingsModel = HuggingFaceEndpointEmbeddings(
 # get json source and target file locations
 rootPath = Path(__file__).resolve().parents[1]
 sourcePath = rootPath / "courses-source.json"
-targetPath = rootPath / "courses.json"
+targetPath = rootPath / "frontend" / "src" / "lib" / "courses.json"
 
 # storage structures
 documents = []
@@ -26,9 +26,11 @@ with open(sourcePath) as fi:
         documents.append(course["title"] + ": " + course["description"])
 
 # get embeddings and combine them with the source data
+# also delete descriptions as they are no longer needed
 doc_embeddings = embeddingsModel.embed_documents(documents)
 for i,course in enumerate(data):
     course["vector"] = doc_embeddings[i]
+    del course["description"]
 
 with open(targetPath, "w") as fo:
     json.dump(data, fo, indent=2)

@@ -1,6 +1,10 @@
 <script lang="ts">
 	import HowToPlay from '$lib/components/HowToPlay.svelte';
+	import { loadCoursesMap } from '$lib/domain/data-loaders';
     import { ChartColumn } from '@lucide/svelte';
+
+    const coursesMap = loadCoursesMap();
+    
 </script>
 
 <div class="flex w-full h-screen bg-zinc-800 justify-center items-center text-white">
