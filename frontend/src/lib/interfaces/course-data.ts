@@ -4,3 +4,8 @@ export interface CourseData {
     title: string
     vector: number[]
 }
+
+export interface ScoredCourse {
+    title: string
+    score: number
+}
