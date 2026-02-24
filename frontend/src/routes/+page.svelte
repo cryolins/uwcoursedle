@@ -2,13 +2,15 @@
 	import HowToPlay from '$lib/components/HowToPlay.svelte';
 	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
 	import { clickOutside } from '$lib/domain/click-outside.svelte';
-	import { loadCoursesMap } from '$lib/domain/data-loaders';
+	import { getDailyCourse, loadCoursesMap } from '$lib/domain/data-loaders';
 	import { titleToScoredCourse } from '$lib/domain/query-scoring';
 	import type { ScoredCourse } from '$lib/interfaces/course-data';
     import { ArrowUpLeft, ChartColumn } from '@lucide/svelte';
 
+    // load in json data
     const coursesMap = loadCoursesMap();
     const courseTitles = [...coursesMap.keys()];
+    const dailyCourse = getDailyCourse();
 
     // search bar states
     let isSearchBarFocused = $state(false);
@@ -64,7 +66,7 @@
         <!-- daily course display TODO fetch daily course -->
         <div class="flex flex-col w-full h-fit items-center text-center">
             <h4 class="text-xl">Today's course:</h4>
-            <h2 class="daily-course-text wrap-anywhere">WWWWW308E</h2>
+            <h2 class="daily-course-text wrap-anywhere">{dailyCourse.courseId}</h2>
             <h6>Guess the course title in 10 tries. <wbr>Enter a guess below!</h6>
         </div>
 
