@@ -2,26 +2,22 @@
 	import HowToPlay from '$lib/components/HowToPlay.svelte';
 	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
 	import { clickOutside } from '$lib/domain/click-outside.svelte';
+	import { setLoadedDataContext } from '$lib/domain/contexts';
 	import { getDailyCourse, loadCoursesMap } from '$lib/domain/data-loaders';
 	import { titleToScoredCourse } from '$lib/domain/query-scoring';
 	import { matchWords } from '$lib/domain/sim-calcs';
 	import type { ScoredCourse } from '$lib/interfaces/course-data';
     import { ArrowUpLeft, ChartColumn } from '@lucide/svelte';
+    import SearchBar from '$lib/components/SearchBar.svelte'
 
     // load in json data
     const coursesMap = loadCoursesMap();
     const courseTitles = [...coursesMap.keys()];
     const dailyCourse = getDailyCourse();
+    setLoadedDataContext({ coursesMap, courseTitles, dailyCourse });
 
     // search bar states
-    let isSearchBarFocused = $state(false);
-    let isSearchFocused = $state(false);
-    let query = $state("");
-    let searchResults = $derived(
-        courseTitles.map(title => titleToScoredCourse(title, query))
-                    .filter(scoredTitle => scoredTitle.score > 0)
-                    .sort((a, b) => b.score - a.score) // sort descending on score
-    );
+    let query = $state<string>("");
 
     // small functions
     const guessCourse = (e: MouseEvent) => {
@@ -33,18 +29,7 @@
             console.log(matchWords(guessedTitle, dailyCourse.title));
             console.log("guessed"); // TODO
         }
-    }
-    const fillInSearch = (e: MouseEvent) => {
-        e.stopPropagation();
-        const clickedBtn = e.currentTarget as HTMLElement;
-        const clickedTitle = clickedBtn.parentElement?.id;
-        query = !!clickedTitle ? clickedTitle : query;
-    }
-    const setFocusTrue = () => {
-        isSearchBarFocused = true;
-        isSearchFocused = true;
-    }
-    
+    }    
     
 </script>
 
@@ -65,43 +50,15 @@
             </div>
         </div>
 
-        <!-- daily course display TODO fetch daily course -->
+        <!-- daily course display -->
         <div class="flex flex-col w-full h-fit items-center text-center">
             <h4 class="text-xl">Today's course:</h4>
             <h2 class="daily-course-text wrap-anywhere">{dailyCourse.courseId}</h2>
             <h6>Guess the course title in 10 tries. <wbr>Enter a guess below!</h6>
         </div>
 
-        <!-- course search field TODO make the filtering -->
-        <div class="w-5/6 h-fit relative search-frame-style" role="button" use:clickOutside onclick_outside={() => isSearchFocused = false}>
-            <input type="text" placeholder="Enter a guess..." bind:value={query} class="search-frame-sizing"
-            onfocus={setFocusTrue} oninput={setFocusTrue} onblur={() => isSearchBarFocused = false}/>
-
-            <div class="w-full h-fit absolute top-full mt-1.5" hidden={!(isSearchFocused || isSearchBarFocused)}>
-                <ScrollArea class="w-full rounded-sm border-2 border-primary2 border-solid">
-                    <ol class="max-h-[40vh]">
-                        {#each searchResults as searchResult}
-                            <li class="relative" id={searchResult.title}>
-                                <button onclick={guessCourse} class="search-result search-result-hover transition-colors">
-                                    <p>{searchResult.title}</p>
-
-                                    <!-- dummy box to take up space to leave room for real arrow-->
-                                    <div class="opacity-0">
-                                        <ArrowUpLeft />
-                                    </div>
-                                </button>
-                                <button onclick={fillInSearch} class="absolute top-1 right-1 rounded-full hover:bg-primary/20 text-foreground/80">
-                                    <ArrowUpLeft />
-                                </button>
-                            </li>
-                        {/each}
-                        {#if (!searchResults.length)}
-                            <li class="search-result">No results found</li>
-                        {/if}
-                    </ol>
-                </ScrollArea>
-            </div>
-        </div>
+        <!-- course search bar -->
+        <SearchBar bind:query={query} guessCourse={guessCourse}/>
 
         <!-- guesses container -->
         <div class="flex flex-col w-full min-h-32 grow items-center gap-6 overflow-auto fg-scrollbar">
