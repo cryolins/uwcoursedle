@@ -4,6 +4,7 @@
 	import { clickOutside } from '$lib/domain/click-outside.svelte';
 	import { getDailyCourse, loadCoursesMap } from '$lib/domain/data-loaders';
 	import { titleToScoredCourse } from '$lib/domain/query-scoring';
+	import { matchWords } from '$lib/domain/sim-calcs';
 	import type { ScoredCourse } from '$lib/interfaces/course-data';
     import { ArrowUpLeft, ChartColumn } from '@lucide/svelte';
 
@@ -29,6 +30,7 @@
         const guessedTitle = clickedBtn.parentElement?.id;
         console.log(guessedTitle);
         if (guessedTitle) {
+            console.log(matchWords(guessedTitle, dailyCourse.title));
             console.log("guessed"); // TODO
         }
     }
