@@ -9,7 +9,8 @@ export function cosineSim(a: number[], b: number[]) {
 
 // takes a cosine similarity value between -1 and 1 and scales it to be valuable for the player
 export function scaleCosineSim(cosineSim: number) {
-    return 0.35 * Math.atan(14 * ((cosineSim + 1) / 2 - 0.6)) + 0.512;
+    //also round it to nearest thousandth
+    return Math.round(1000 * (0.35 * Math.atan(14 * ((cosineSim + 1) / 2 - 0.6)) + 0.512)) / 1000;
 }
 
 // checks what words are shared/matched between guessed title and daily title

@@ -9,7 +9,7 @@
 @theme inline {
   --color-primary2: #f2d368;
   --color-primary2-dark: #E7bc28;
-  --color-word-match: #57ea83;
+  --color-word-match: #57ea83;;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -62,6 +62,30 @@ div, p, body {
 }
 .search-result-hover:hover {
   background-color: var(--accent);
+}
+
+/* guesses area styles */
+.main-guess-scroll-area {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+  min-height: 8rem;
+  gap: 1rem;
+  align-items: center;
+}
+
+@keyframes match-gradient {
+  0% {
+    color: white;
+  }
+  100% {
+    color: var(--color-word-match);
+  }
+}
+
+.matched-animate-in {
+  animation: match-gradient 1s ease-out forwards;
 }
 
 /* scrollbars */

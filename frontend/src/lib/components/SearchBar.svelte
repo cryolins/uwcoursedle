@@ -25,6 +25,11 @@
     );
 
     // small functions
+    const guessCourseAndBlur = (e: MouseEvent) => {
+        guessCourse(e);
+        isSearchBarFocused = false;
+        isSearchFocused = false;
+    }
     const fillInSearch = (e: MouseEvent) => {
         e.stopPropagation();
         const clickedBtn = e.currentTarget as HTMLElement;
@@ -43,12 +48,12 @@
     <input type="text" placeholder="Enter a guess..." bind:value={query} class="search-frame-sizing"
     onfocus={setFocusTrue} oninput={setFocusTrue} onblur={() => isSearchBarFocused = false}/>
 
-    <div class="w-full h-fit absolute top-full mt-1.5" hidden={!(isSearchFocused || isSearchBarFocused)}>
+    <div class="w-full h-fit absolute z-10 top-full mt-1.5" hidden={!(isSearchFocused || isSearchBarFocused)}>
         <ScrollArea class="w-full rounded-sm border-2 border-primary2 border-solid">
             <ol class="max-h-[40vh]">
                 {#each searchResults as searchResult}
                     <li class="relative" id={searchResult.title}>
-                        <button onclick={guessCourse} class="search-result search-result-hover transition-colors">
+                        <button onclick={guessCourseAndBlur} class="search-result search-result-hover transition-colors">
                             <p>{searchResult.title}</p>
 
                             <!-- dummy box to take up space to leave room for real arrow-->
