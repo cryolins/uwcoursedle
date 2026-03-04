@@ -1,18 +1,16 @@
 <script lang="ts">
-	import HowToPlay from '$lib/components/HowToPlay.svelte';
-	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
-	import { clickOutside } from '$lib/domain/click-outside.svelte';
+	import HowToPlay from '$lib/components/custom/HowToPlay.svelte';
 	import { setLoadedDataContext } from '$lib/domain/contexts';
 	import { getDailyCourse, loadCoursesMap } from '$lib/domain/data-loaders';
-	import { titleToScoredCourse } from '$lib/domain/query-scoring';
 	import { cosineSim, matchWords, scaleCosineSim } from '$lib/domain/sim-calcs';
-	import { type GuessedCourse, type ScoredCourse } from '$lib/interfaces/course-data';
-    import { ArrowUpLeft, ChartColumn } from '@lucide/svelte';
-    import SearchBar from '$lib/components/SearchBar.svelte'
-    import GuessTitleText from '$lib/components/GuessTitleText.svelte'
-	import GuessBlock from '$lib/components/GuessBlock.svelte';
-	import { getTodayGuessKey, getTodayKey } from '$lib/domain/storage';
+	import { type GuessedCourse } from '$lib/interfaces/course-data';
+    import { ChartColumn } from '@lucide/svelte';
+    import SearchBar from '$lib/components/custom/SearchBar.svelte'
+	import GuessBlock from '$lib/components/custom/GuessBlock.svelte';
+	import { getTodayGuessKey } from '$lib/domain/storage';
 	import { onMount } from 'svelte';
+	import Navbar from '$lib/components/custom/Navbar.svelte';
+	import DailyCourse from '$lib/components/custom/DailyCourse.svelte';
 
     // constants
     const MAX_DAILY_GUESSES = 10;
@@ -27,7 +25,7 @@
     // search bar and guesses states
     let query = $state<string>("");
     let guesses = $state<GuessedCourse[]>([]);
-    let hasWon = $state(false);
+    let hasWon = $derived(guesses.some(course => course.simScore === 1));
 
     // small functions
     const guessCourse = (e: MouseEvent) => {
@@ -39,8 +37,6 @@
         const guessedTitle = clickedBtn.parentElement?.id;
         const guessedCourse = guessedTitle ? coursesMap.get(guessedTitle) : undefined;
         if (guessedTitle && guessedCourse) {
-            if (guessedTitle === dailyCourse.title) { hasWon = true; }
-
             const titleFrags = matchWords(guessedTitle, dailyCourse.title);
             const simScore = scaleCosineSim(cosineSim(guessedCourse.vector, dailyCourse.vector))
             guesses.push({ titleFrags, simScore, guessNum: guesses.length + 1 });
@@ -76,34 +72,19 @@
         }
     });
 
-    // const resetGuesses = () => { guesses = []; hasWon = false; }
+    // const resetGuesses = () => { guesses = []; }
     
 </script>
 
-<div class="flex w-full h-screen bg-zinc-800 justify-center items-center text-white">
+<div class="outer-main-container">
     <!-- central game container -->
-    <div class="flex flex-col size-full max-w-xl items-center gap-6 overflow-y-auto overflow-x-hidden fg-scrollbar">
+    <div class="central-main-container fg-scrollbar">
 
         <!-- top navbar -->
-        <div class="flex flex-row w-full h-fit justify-between px-2 py-3 border-b-8 border-primary2">
-            <h1 class="text-4xl overflow-hidden">
-                <span class="text-primary2">UW</span>Coursedle
-            </h1>
-
-            <!-- dialog-opening icons TODO dialog components -->
-            <div class="flex flex-row w-fit h-full gap-2 sm:gap-4">
-                <HowToPlay />
-                <ChartColumn class="size-10"/>
-            </div>
-        </div>
+        <Navbar />
 
         <!-- daily course display -->
-        <div class="flex flex-col w-full h-fit items-center text-center">
-            <!-- <button class="bg-white text-zinc-900" onclick={resetGuesses}>reset {dayGuessKey}</button> -->
-            <h4 class="text-xl">Today's course:</h4>
-            <h2 class="daily-course-text wrap-anywhere">{dailyCourse.courseId}</h2>
-            <h6>Guess the course title in 10 tries. <wbr>Enter a guess below!</h6>
-        </div>
+        <DailyCourse dailyCourseId={dailyCourse.courseId} />
 
         <!-- course search bar -->
         <SearchBar bind:query={query} guessCourse={guessCourse}/>
@@ -111,7 +92,7 @@
         <!-- guesses container -->
         <div class="main-guess-scroll-area overflow-auto fg-scrollbar">
             <!-- guess fields labels -->
-            <div class="flex flex-row w-4/5 h-fit justify-between gap-2">
+            <div class="guess-col-headers">
                 <p>Guess #</p>
                 <p>Course title</p>
                 <p>Similarity</p>

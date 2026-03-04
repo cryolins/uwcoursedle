@@ -1,0 +1,38 @@
+.guess-block {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: fit-content;
+  justify-content: space-around;
+  gap: 1rem;
+  align-items: center;
+  padding-inline: 1.5rem;
+  padding-block: 0.75rem;
+  background-color: var(--color-zinc-900);
+}
+
+.course-title {
+  width: auto;
+  flex-grow: 1;
+  overflow-wrap: break-word;
+  text-align: center;
+}
+
+.sim-score {
+    width: fit-content;
+    min-width: 3.25rem;
+    text-align: end;
+}
+
+@keyframes match-gradient {
+  0% {
+    color: white;
+  }
+  100% {
+    color: var(--color-word-match);
+  }
+}
+
+.matched-animate-in {
+  animation: match-gradient 1s ease-out forwards;
+}

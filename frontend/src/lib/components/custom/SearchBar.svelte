@@ -3,9 +3,10 @@
 	import { titleToScoredCourse } from "$lib/domain/query-scoring";
 	import { matchWords } from "$lib/domain/sim-calcs";
 	import { ArrowUpLeft } from "@lucide/svelte";
-	import ScrollArea from "./ui/scroll-area/scroll-area.svelte";
+	import ScrollArea from "../ui/scroll-area/scroll-area.svelte";
 	import type { CourseData } from "$lib/interfaces/course-data";
 	import { getLoadedDataContext } from "$lib/domain/contexts";
+    import "./search-bar.css";
 
     interface SearchProps {
         query: string
@@ -44,12 +45,12 @@
 </script>
 
 <!-- course search field -->
-<div class="w-5/6 h-fit relative search-frame-style" role="button" use:clickOutside onclick_outside={() => isSearchFocused = false}>
+<div class="outer-container-sizing relative search-frame-style" role="button" use:clickOutside onclick_outside={() => isSearchFocused = false}>
     <input type="text" placeholder="Enter a guess..." bind:value={query} class="search-frame-sizing"
     onfocus={setFocusTrue} oninput={setFocusTrue} onblur={() => isSearchBarFocused = false}/>
 
-    <div class="w-full h-fit absolute z-10 top-full mt-1.5" hidden={!(isSearchFocused || isSearchBarFocused)}>
-        <ScrollArea class="w-full rounded-sm border-2 border-primary2 border-solid">
+    <div class="absolute dropdown-container" hidden={!(isSearchFocused || isSearchBarFocused)}>
+        <ScrollArea class="w-full rounded-sm dropdown-scrollarea-border">
             <ol class="max-h-[40vh]">
                 {#each searchResults as searchResult}
                     <li class="relative" id={searchResult.title}>

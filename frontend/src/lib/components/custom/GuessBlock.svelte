@@ -2,6 +2,7 @@
 	import type { GuessedCourse } from "$lib/interfaces/course-data";
 	import { onDestroy, onMount } from "svelte";
 	import GuessTitleText from "./GuessTitleText.svelte";
+    import "./guesses.css";
 
     interface GuessBlockProps {
         guess: GuessedCourse
@@ -28,10 +29,10 @@
 
 </script>
 
-<ul class="flex flex-row w-full h-fit justify-around gap-4 items-center px-6 py-3 bg-zinc-900">
+<ul class="guess-block">
     <p class="w-fit">{guess.guessNum}</p>
-    <p class="w-auto grow wrap-break-word text-center">
+    <p class="course-title">
         <GuessTitleText titleFrags={guess.titleFrags} />
     </p>
-    <p class="w-fit min-w-13 text-end font-mono">{(guess.simScore * countPercent * 100).toFixed(1)}%</p>
+    <p class="sim-score">{(guess.simScore * countPercent * 100).toFixed(1)}%</p>
 </ul>

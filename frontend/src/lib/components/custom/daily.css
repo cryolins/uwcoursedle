@@ -1,0 +1,13 @@
+/* course display classes */
+.daily-course-text {
+  font-size: clamp(22px, 10vw, 64px);
+}
+
+.daily-display {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: fit-content;
+  align-items: center;
+  text-align: center;
+}

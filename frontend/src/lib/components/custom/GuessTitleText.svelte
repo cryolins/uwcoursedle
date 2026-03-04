@@ -1,7 +1,6 @@
 <script lang="ts">
-    
+    import "./guesses.css";
     let { titleFrags }: { titleFrags: string[] } = $props();
-
 </script>
 
 {#each titleFrags as frag}

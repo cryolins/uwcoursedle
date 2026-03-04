@@ -1,0 +1,20 @@
+/* navbar classes */
+.navbar-style {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: fit-content;
+  justify-content: space-between;
+  
+  padding-inline: 0.5rem;
+  padding-block: 0.75rem;
+  border-bottom: 8px solid var(--color-primary2);
+
+  user-select: none;
+}
+.icons-container {
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  height: 100%;
+}

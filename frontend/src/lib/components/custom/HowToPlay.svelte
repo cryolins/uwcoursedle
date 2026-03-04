@@ -1,7 +1,7 @@
 <script lang="ts">
     import * as Dialog from "$lib/components/ui/dialog/index.js";
     import { CircleQuestionMark } from '@lucide/svelte';
-	import ScrollArea from "./ui/scroll-area/scroll-area.svelte";
+	import ScrollArea from "../ui/scroll-area/scroll-area.svelte";
 </script>
  
 <Dialog.Root>
