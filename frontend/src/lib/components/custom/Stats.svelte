@@ -10,6 +10,7 @@
 	import { getLoadedDataContext } from "$lib/domain/contexts";
 	import type { GuessedCourse } from "$lib/interfaces/course-data";
 	import { SITE_URL } from "$lib/config";
+	import { toast } from "svelte-sonner";
 
     let { openStats=$bindable() } : { openStats?: boolean } = $props();
     let { stats, dayGuessKey, hasWon, hasLost, guesses } = getLoadedDataContext();
@@ -31,6 +32,10 @@
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(copyInput?.value ?? "");
+        if (copyInput?.value) {
+            // send a toast
+            toast.info("Copied!");
+        }
     }
 
     onMount(() => {

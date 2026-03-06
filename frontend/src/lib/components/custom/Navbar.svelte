@@ -12,7 +12,7 @@
         <span class="text-primary2">UW</span>Coursedle
     </h1>
 
-    <!-- dialog-opening icons TODO dialog components -->
+    <!-- dialog-opening icons -->
     <div class="icons-container gap-2 sm:gap-4">
         <HowToPlay />
         <Stats bind:openStats={openStats} />

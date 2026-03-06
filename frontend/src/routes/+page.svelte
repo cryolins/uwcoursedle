@@ -11,6 +11,7 @@
 	import DailyCourse from '$lib/components/custom/DailyCourse.svelte';
 	import { type PlayerStats } from '$lib/interfaces/stats';
 	import { MAX_DAILY_GUESSES } from '$lib/config';
+	import { toast } from 'svelte-sonner';
 
     // load in json data
     const coursesMap = loadCoursesMap();
@@ -42,7 +43,6 @@
     const guessCourse = (e: MouseEvent) => {
         e.stopPropagation();
         if (hasWon || hasLost) { return; } // do nothing if no guesses left
-        //^^^ possible TODO: make a toast notification for it
 
         const clickedBtn = e.currentTarget as HTMLElement;
         const guessedTitle = clickedBtn.parentElement?.id;
@@ -108,6 +108,9 @@
                         (scoreAcc: number, currGuess: GuessedCourse) => scoreAcc + currGuess.simScore, 0);
                     
                     localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+
+                    // send a toast
+                    toast.success("You won!");
                 }
                 openStats = true;
             });
@@ -125,6 +128,9 @@
                         (scoreAcc: number, currGuess: GuessedCourse) => scoreAcc + currGuess.simScore, 0);
                     
                     localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+
+                    // send a toast
+                    toast.error("Game over :(");
                 }
                 openStats = true;
             });
