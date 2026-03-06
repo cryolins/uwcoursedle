@@ -31,6 +31,11 @@ div, p, body {
   font-weight: 600;
 }
 
+.dialog-inner-scroll-size {
+  width: 100%;
+  max-height: calc(80vh - 102px);
+}
+
 /* main containers classes */
 .outer-main-container {
   display: flex;
@@ -52,6 +57,14 @@ div, p, body {
   gap: 1.5rem;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+/* text box styles */
+.text-frame-style {
+  border-radius: 0.25rem;
+  outline: solid 3px var(--color-primary2);
+  background-color: var(--color-white);
+  color: var(--color-black);
 }
 
 /* guesses area styles */

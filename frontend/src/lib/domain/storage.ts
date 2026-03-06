@@ -6,3 +6,5 @@ export function getTodayKey(): string {
 export function getTodayGuessKey(): string {
     return "guess-" + getTodayKey();
 }
+
+export const STATS_KEY = "uwc-stats";

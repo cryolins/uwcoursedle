@@ -2,6 +2,7 @@
     import * as Dialog from "$lib/components/ui/dialog/index.js";
     import { CircleQuestionMark } from '@lucide/svelte';
 	import ScrollArea from "../ui/scroll-area/scroll-area.svelte";
+	import { MAX_DAILY_GUESSES } from "$lib/config";
 </script>
  
 <Dialog.Root>
@@ -9,15 +10,15 @@
         <CircleQuestionMark class="size-10"/>
     </Dialog.Trigger>
 
-    <Dialog.Content class="w-xl max-w-full">
+    <Dialog.Content class="w-xl max-w-9/10">
         <Dialog.Header>
             <Dialog.Title><h1>How to Play</h1></Dialog.Title>
         </Dialog.Header>
 
-        <ScrollArea type="always" class="w-full max-h-[calc(80vh-102px)]">
+        <ScrollArea type="always" class="dialog-inner-scroll-size">
             <div class="flex flex-col w-full gap-4">
                 <p>
-                    Welcome to <span class="text-primary2">UW</span>Coursedle! Your goal is to guess the correct course title based off the course code in <span class="font-bold underline">10</span> tries.
+                    Welcome to <span class="text-primary2">UW</span>Coursedle! Your goal is to guess the correct course title based off the course code in <span class="font-bold underline">{MAX_DAILY_GUESSES}</span> tries.
                 </p>
                 <p>
                     These courses are based off those listed on the University of Waterloo’s <a href="https://uwaterloo.ca/academic-calendar/undergraduate-studies/catalog#/home" class="underline">undergraduate calendar</a>.

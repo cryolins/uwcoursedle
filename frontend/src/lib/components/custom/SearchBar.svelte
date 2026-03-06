@@ -15,7 +15,7 @@
 
     // search bar states
     let { query=$bindable(), guessCourse }: SearchProps = $props();
-    const { courseTitles, dailyCourse } = getLoadedDataContext();
+    const { courseTitles } = getLoadedDataContext();
     let isSearchBarFocused = $state(false);
     let isSearchFocused = $state(false);
     //let query = $state("");
@@ -45,7 +45,7 @@
 </script>
 
 <!-- course search field -->
-<div class="outer-container-sizing relative search-frame-style" role="button" use:clickOutside onclick_outside={() => isSearchFocused = false}>
+<div class="outer-container-sizing relative text-frame-style" role="button" use:clickOutside onclick_outside={() => isSearchFocused = false}>
     <input type="text" placeholder="Enter a guess..." bind:value={query} class="search-frame-sizing"
     onfocus={setFocusTrue} oninput={setFocusTrue} onblur={() => isSearchBarFocused = false}/>
 
