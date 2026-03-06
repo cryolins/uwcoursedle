@@ -1,10 +1,14 @@
-export function getTodayKey(): string {
-    const today = new Date();
-    const dayNum = (today.getFullYear() * 10000) + ((today.getMonth() + 1) * 100) + (today.getDate());
+function getDayNum(dayOffset = 0): string {
+    const day = new Date();
+    day.setDate(day.getDate() + dayOffset);
+    const dayNum = (day.getFullYear() * 10000) + ((day.getMonth() + 1) * 100) + (day.getDate());
     return dayNum.toString();
 }
 export function getTodayGuessKey(): string {
-    return "guess-" + getTodayKey();
+    return "guess-" + getDayNum();
+}
+export function getYesterdayGuessKey(): string {
+    return "guess-" + getDayNum(-1);
 }
 
 export const STATS_KEY = "uwc-stats";
