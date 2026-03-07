@@ -5,7 +5,7 @@
 	import { type GuessedCourse } from '$lib/interfaces/course-data';
     import SearchBar from '$lib/components/custom/SearchBar.svelte'
 	import GuessBlock from '$lib/components/custom/GuessBlock.svelte';
-	import { getTodayGuessKey, STATS_KEY } from '$lib/domain/storage';
+	import { getTodayGuessKey, getYesterdayGuessKey, STATS_KEY } from '$lib/domain/storage';
 	import { onMount, untrack } from 'svelte';
 	import Navbar from '$lib/components/custom/Navbar.svelte';
 	import DailyCourse from '$lib/components/custom/DailyCourse.svelte';
@@ -18,6 +18,7 @@
     const courseTitles = [...coursesMap.keys()];
     const dailyCourse = getDailyCourse();
     const dayGuessKey = getTodayGuessKey();
+    const yesterdayGuessKey = getYesterdayGuessKey();
 
     // search bar and guesses states
     let query = $state<string>("");
@@ -67,6 +68,15 @@
         const savedStats = localStorage.getItem(STATS_KEY);
         stats = savedStats ? JSON.parse(savedStats) : stats;
 
+        // fetch yesterday data to decide if streak exists
+        const yesterdayGuessesStr = localStorage.getItem(yesterdayGuessKey);
+        const yesterdayGuesses: GuessedCourse[] = yesterdayGuessesStr ? JSON.parse(yesterdayGuessesStr) :  []
+        const wonYesterday = yesterdayGuesses && yesterdayGuesses.some(course => course.simScore === 1);
+        if (!wonYesterday) { 
+            stats.streak = 0; 
+            localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+        }
+
         // setup tab sync event for guesses
         const storageHandler = (e: StorageEvent) => {
             if (e.key === dayGuessKey && e.newValue) {
@@ -98,7 +108,7 @@
     $effect(() => {
         if (hasWon) { // hasWon is sole dependency
             untrack(() => {
-                if (canEnd) {
+                if (canEnd) {                    
                     // update stats
                     stats.plays += 1;
                     stats.wins += 1;
