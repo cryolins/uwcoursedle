@@ -52,16 +52,17 @@
         <ScrollArea type="always" class="dialog-inner-scroll-size overflow-y-hidden">
             <div class="main-stats-container">
                 <!-- all-time stats -->
+                 <h3 class="text-xl">All-time Games Stats</h3>
                 <div class="all-time-container">
                     <img src={stats().streak ? flameImg : greyFlameImg} alt="streak flame" class="streak-img"/>
-                    <div>Current <br/>Streak:<br/><h6 class="text-3xl">{stats().streak}</h6></div>
+                    <div>Win <br/>Streak:<br/><h6 class="text-3xl">{stats().streak}</h6></div>
                     <div class="all-time-grid">
                         <div>
-                            <p>Games <wbr/>Played</p>
+                            <p>Completed</p>
                             <h6>{stats().plays}</h6>
                         </div>
                         <div>
-                            <p>Games <wbr/>Won</p>
+                            <p>Won</p>
                             <h6>{stats().wins}</h6>
                         </div>
                         <div>
@@ -70,7 +71,7 @@
                         </div>
                         <div>
                             <p>Avg. <wbr/>Guesses</p>
-                            <h6>{stats().wins ? (stats().guessStats.amt / stats().wins).toFixed(1): "N/A"}</h6>
+                            <h6>{stats().wins ? (stats().guessStats.amt / stats().plays).toFixed(1): "N/A"}</h6>
                         </div>
                     </div>                        
                 </div>
