@@ -73,7 +73,7 @@
         const yesterdayGuesses: GuessedCourse[] = yesterdayGuessesStr ? JSON.parse(yesterdayGuessesStr) :  []
         const wonYesterday = yesterdayGuesses && yesterdayGuesses.some(course => course.simScore === 1);
         if (!wonYesterday) { 
-            stats.streak = 0; 
+            stats.streak = hasWon ? 1 : 0; 
             localStorage.setItem(STATS_KEY, JSON.stringify(stats));
         }
 

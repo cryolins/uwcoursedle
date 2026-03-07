@@ -19,7 +19,7 @@
 	>{#snippet loadingIcon()}
 		<Loader2Icon class="size-4 animate-spin" />
 	{/snippet}
-	{#snippet successIcon()}
+	<!-- {#snippet successIcon()}
 		<CircleCheckIcon class="size-4" />
 	{/snippet}
 	{#snippet errorIcon()}
@@ -30,5 +30,5 @@
 	{/snippet}
 	{#snippet warningIcon()}
 		<TriangleAlertIcon class="size-4" />
-	{/snippet}
+	{/snippet} -->
 </Sonner>
