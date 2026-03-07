@@ -68,6 +68,15 @@
         const savedStats = localStorage.getItem(STATS_KEY);
         stats = savedStats ? JSON.parse(savedStats) : stats;
 
+        // fetch yesterday data to decide if streak exists
+        const yesterdayGuessesStr = localStorage.getItem(yesterdayGuessKey);
+        const yesterdayGuesses: GuessedCourse[] = yesterdayGuessesStr ? JSON.parse(yesterdayGuessesStr) :  []
+        const wonYesterday = yesterdayGuesses && yesterdayGuesses.some(course => course.simScore === 1);
+        if (!wonYesterday) { 
+            stats.streak = 0; 
+            localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+        }
+
         // setup tab sync event for guesses
         const storageHandler = (e: StorageEvent) => {
             if (e.key === dayGuessKey && e.newValue) {
@@ -99,17 +108,11 @@
     $effect(() => {
         if (hasWon) { // hasWon is sole dependency
             untrack(() => {
-                if (canEnd) {
-                    // fetch yesterday data to decide if streak exists
-                    const yesterdayGuessesStr = localStorage.getItem(yesterdayGuessKey);
-                    const yesterdayGuesses: GuessedCourse[] = yesterdayGuessesStr ? JSON.parse(yesterdayGuessesStr) :  []
-                    const wonYesterday = yesterdayGuesses && yesterdayGuesses.some(course => course.simScore === 1);
-                    
+                if (canEnd) {                    
                     // update stats
                     stats.plays += 1;
                     stats.wins += 1;
-                    if (wonYesterday) { stats.streak += 1; }
-                    else { stats.streak = 1; }
+                    stats.streak += 1;
                     stats.guessStats.amt += guesses.length;
                     stats.guessStats.scoreSum += guesses.reduce(
                         (scoreAcc: number, currGuess: GuessedCourse) => scoreAcc + currGuess.simScore, 0);
