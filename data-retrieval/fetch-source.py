@@ -12,21 +12,21 @@ OUTPUT_FILE = "first-pass.json"
 load_dotenv()
 UW_API_KEY = os.getenv("UW_API_KEY")
 
-termDfs: list[pd.DataFrame] = []
+term_dfs: list[pd.DataFrame] = []
 
 for code in TERM_CODES:
     url = f"https://openapi.data.uwaterloo.ca/v3/Courses/{code}"
-    termResponse = requests.get(url, headers={ "x-api-key" : UW_API_KEY })
+    term_response = requests.get(url, headers={ "x-api-key" : UW_API_KEY })
 
-    if(termResponse.status_code == 200):
-        termDf = pd.read_json(StringIO(termResponse.text))
-        termDfs.append(termDf)
+    if(term_response.status_code == 200):
+        term_df = pd.read_json(StringIO(term_response.text))
+        term_dfs.append(term_df)
     else:
         raise Exception(f"failed to load term {code}")
     
 print("fetched all 3 terms successfully!")
 
-df = pd.concat(termDfs, ignore_index=True)
+df = pd.concat(term_dfs, ignore_index=True)
 
 # keep only relevant columns
 df = df[["associatedAcademicCareer", "subjectCode", "catalogNumber", "title", "description"]]

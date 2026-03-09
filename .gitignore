@@ -28,3 +28,6 @@ vite.config.ts.timestamp-*
 
 # backend
 .venv/
+
+# intermediate data jsons
+/data-retrieval/*.json
