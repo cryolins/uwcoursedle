@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { clickOutside } from "$lib/domain/click-outside.svelte";
-	import { titleToScoredCourse } from "$lib/domain/query-scoring";
+	import { courseToScoredCourse } from "$lib/domain/query-scoring";
 	import { matchWords } from "$lib/domain/sim-calcs";
 	import { ArrowUpLeft } from "@lucide/svelte";
 	import ScrollArea from "../ui/scroll-area/scroll-area.svelte";
@@ -20,7 +20,7 @@
     let isSearchFocused = $state(false);
     //let query = $state("");
     let searchResults = $derived(
-        courseTitles.map(title => titleToScoredCourse(title, query))
+        courseTitles.map(iden => courseToScoredCourse(iden, query))
                     .filter(scoredTitle => scoredTitle.score > 0)
                     .sort((a, b) => b.score - a.score) // sort descending on score
     );
@@ -53,7 +53,7 @@
         <ScrollArea class="w-full rounded-sm dropdown-scrollarea-border">
             <ol class="max-h-[40vh]">
                 {#each searchResults as searchResult}
-                    <li class="relative" id={searchResult.title}>
+                    <li class="relative" id={searchResult.courseId}>
                         <button onclick={guessCourseAndBlur} class="search-result search-result-hover transition-colors">
                             <p>{searchResult.title}</p>
 

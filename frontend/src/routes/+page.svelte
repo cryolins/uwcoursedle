@@ -1,24 +1,22 @@
 <script lang="ts">
 	import { setLoadedDataContext } from '$lib/domain/contexts';
-	import { getDailyCourse, loadCoursesMap } from '$lib/domain/data-loaders';
 	import { cosineSim, matchWords, scaleCosineSim } from '$lib/domain/sim-calcs';
 	import { type GuessedCourse } from '$lib/interfaces/course-data';
     import SearchBar from '$lib/components/custom/SearchBar.svelte'
 	import GuessBlock from '$lib/components/custom/GuessBlock.svelte';
-	import { getTodayGuessKey, getYesterdayGuessKey, STATS_KEY } from '$lib/domain/storage';
+	import { STATS_KEY } from '$lib/domain/storage';
 	import { onMount, untrack } from 'svelte';
 	import Navbar from '$lib/components/custom/Navbar.svelte';
 	import DailyCourse from '$lib/components/custom/DailyCourse.svelte';
 	import { type PlayerStats } from '$lib/interfaces/stats';
 	import { MAX_DAILY_GUESSES } from '$lib/config';
 	import { toast } from 'svelte-sonner';
+	import type { PageData, PageProps } from './$types';
+	import type { GuessResponse } from '$lib/interfaces/guess-server';
 
     // load in json data
-    const coursesMap = loadCoursesMap();
-    const courseTitles = [...coursesMap.keys()];
-    const dailyCourse = getDailyCourse();
-    const dayGuessKey = getTodayGuessKey();
-    const yesterdayGuessKey = getYesterdayGuessKey();
+    let { data }: PageProps = $props();
+    const { courseTitles, dailyCourseId, dayGuessKey, yesterdayGuessKey } = data;
 
     // search bar and guesses states
     let query = $state<string>("");
@@ -35,24 +33,31 @@
 
     // context 
     setLoadedDataContext({ 
-        coursesMap, courseTitles, dailyCourse, dayGuessKey,
+        courseTitles, dailyCourseId, dayGuessKey,
         guesses: () => guesses, stats: () => stats,
         hasWon: () => hasWon, hasLost: () => hasLost
     });
 
     // small functions
-    const guessCourse = (e: MouseEvent) => {
+    const guessCourse = async (e: MouseEvent) => {
         e.stopPropagation();
         if (hasWon || hasLost) { return; } // do nothing if no guesses left
 
         const clickedBtn = e.currentTarget as HTMLElement;
-        const guessedTitle = clickedBtn.parentElement?.id;
-        const guessedCourse = guessedTitle ? coursesMap.get(guessedTitle) : undefined;
-        if (guessedTitle && guessedCourse) {
-            const titleFrags = matchWords(guessedTitle, dailyCourse.title);
-            const simScore = scaleCosineSim(cosineSim(guessedCourse.vector, dailyCourse.vector))
-            guesses.push({ titleFrags, simScore, guessNum: guesses.length + 1 });
+        const guessId = clickedBtn.parentElement?.id;
+        if (guessId) {
+            const res = await fetch("/guess", {
+                method: "POST",
+                body: JSON.stringify({ guessId, dailyId: dailyCourseId }),
+                headers: { "Content-Type": "application/json" }
+            });
+            if (!res.ok) {
+                toast.error(`Error processing guess. Please try again (${res.status})`);
+                return;
+            }
 
+            const guessRes: GuessResponse = await res.json();
+            guesses.push({...guessRes, courseId: guessId, guessNum: guesses.length + 1})
             canEnd = true; // tie being able to end to solely making guesses
         }
     }    
@@ -159,7 +164,7 @@
         <Navbar bind:openStats={openStats}/>
 
         <!-- daily course display -->
-        <DailyCourse dailyCourseId={dailyCourse.courseId} />
+        <DailyCourse dailyCourseId={dailyCourseId} />
 
         <!-- course search bar -->
         <SearchBar bind:query={query} guessCourse={guessCourse}/>

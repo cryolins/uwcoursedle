@@ -1,6 +1,6 @@
 // scores courses based on:
 
-import type { ScoredCourse } from "$lib/interfaces/course-data";
+import type { CourseIdentifiers, ScoredCourse } from "$lib/interfaces/course-data";
 
 /*
 - highest if exact match
@@ -20,6 +20,6 @@ export function scoreCourse(title: string, query: string): number {
 }
 
 // function to help package a course title into ScoredCourse
-export function titleToScoredCourse(title: string, query: string): ScoredCourse {
-    return {title, score: scoreCourse(title, query)};
+export function courseToScoredCourse(course: CourseIdentifiers, query: string): ScoredCourse {
+    return { courseId: course.courseId, title: course.title , score: scoreCourse(course.title, query)};
 }

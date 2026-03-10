@@ -1,11 +1,10 @@
-import type { CourseData, GuessedCourse } from "$lib/interfaces/course-data";
+import type { CourseData, CourseIdentifiers, GuessedCourse } from "$lib/interfaces/course-data";
 import type { PlayerStats } from "$lib/interfaces/stats";
 import { createContext } from "svelte";
 
 interface LoadedDataContext {
-    coursesMap: Map<string, CourseData>
-    courseTitles: string[]
-    dailyCourse: CourseData
+    courseTitles: CourseIdentifiers[]
+    dailyCourseId: string
     dayGuessKey: string
     guesses: () => GuessedCourse[]
     stats: () => PlayerStats

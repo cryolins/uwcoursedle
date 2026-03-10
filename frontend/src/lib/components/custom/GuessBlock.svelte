@@ -32,7 +32,7 @@
 <ul class="guess-block">
     <p class="w-fit">{guess.guessNum}</p>
     <p class="course-title">
-        <GuessTitleText titleFrags={guess.titleFrags} />
+        <GuessTitleText titleFrags={guess.titleFrags} courseId={guess.courseId} />
     </p>
     <p class="sim-score">{(guess.simScore * countPercent * 100).toFixed(1)}%</p>
 </ul>
