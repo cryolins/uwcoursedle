@@ -1,12 +1,23 @@
 <script lang="ts">
 	import { MAX_DAILY_GUESSES } from "$lib/config";
+	import { getLoadedDataContext } from "$lib/domain/contexts";
+	import type { CourseIdentifiers } from "$lib/interfaces/course-data";
     import "./daily.css";
-    let { dailyCourseId }: { dailyCourseId: string } = $props();
+    let { dailyCourse, hasLost } = getLoadedDataContext();
+
+    let showAns = $state(false);
 </script>
 
 <div class="daily-display">
-    <!-- <button class="bg-white text-zinc-900" onclick={resetGuesses}>reset {dayGuessKey}</button> -->
     <h4 class="text-xl">Today's course:</h4>
-    <h2 class="daily-course-text wrap-anywhere">{dailyCourseId}</h2>
+    <h2 class="daily-course-text wrap-anywhere">{dailyCourse.courseId}</h2>
+
+    {#if hasLost()}
+        <button class="show-ans-container transition-colors" 
+        onclick={() => showAns = !showAns}>
+            {showAns ? dailyCourse.title : "Show answer"}
+        </button>
+    {/if}
+
     <h6>Guess the course title in {MAX_DAILY_GUESSES} tries. <wbr>Enter a guess below!</h6>
 </div>

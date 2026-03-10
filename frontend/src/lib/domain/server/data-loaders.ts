@@ -1,5 +1,5 @@
 import coursesJsonSource from "./courses.json"
-import type { CourseData } from "$lib/interfaces/course-data";
+import type { CourseData, CourseIdentifiers } from "$lib/interfaces/course-data";
 import { getDailyIndex } from "../prng";
 
 const coursesJson = coursesJsonSource as CourseData[]
@@ -16,7 +16,8 @@ function loadCoursesMap() {
 export const coursesMap = loadCoursesMap();
 
 // gets daily course using seeded prng in the form of a CourseData object
-export function getDailyCourseId(): string {
+export function getDailyCourse(): CourseIdentifiers {
     const dailyIndex = getDailyIndex(coursesJson.length);
-    return coursesJson[dailyIndex].courseId;
+    const { courseId, title } = coursesJson[dailyIndex];
+    return { courseId, title };
 }

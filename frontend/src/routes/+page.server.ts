@@ -1,4 +1,4 @@
-import { getDailyCourseId, coursesMap } from "$lib/domain/server/data-loaders";
+import { coursesMap, getDailyCourse } from "$lib/domain/server/data-loaders";
 import { getTodayGuessKey, getYesterdayGuessKey } from "$lib/domain/storage";
 import type { CourseData, CourseIdentifiers } from "$lib/interfaces/course-data";
 import type { Actions, PageServerLoad } from "./$types";
@@ -12,13 +12,13 @@ export const load: PageServerLoad = () => {
         c => courseDataToIdentifiers(c)
     )];
 
-    const dailyCourseId = getDailyCourseId();
+    const dailyCourse = getDailyCourse();
     const dayGuessKey = getTodayGuessKey();
     const yesterdayGuessKey = getYesterdayGuessKey();
 
     return {
         courseTitles,
-        dailyCourseId,
+        dailyCourse,
         dayGuessKey,
         yesterdayGuessKey
     };

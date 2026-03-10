@@ -16,7 +16,7 @@
 
     // load in json data
     let { data }: PageProps = $props();
-    const { courseTitles, dailyCourseId, dayGuessKey, yesterdayGuessKey } = data;
+    const { courseTitles, dailyCourse, dayGuessKey, yesterdayGuessKey } = data;
 
     // search bar and guesses states
     let query = $state<string>("");
@@ -33,7 +33,7 @@
 
     // context 
     setLoadedDataContext({ 
-        courseTitles, dailyCourseId, dayGuessKey,
+        courseTitles, dailyCourse, dayGuessKey,
         guesses: () => guesses, stats: () => stats,
         hasWon: () => hasWon, hasLost: () => hasLost
     });
@@ -48,7 +48,7 @@
         if (guessId) {
             const res = await fetch("/guess", {
                 method: "POST",
-                body: JSON.stringify({ guessId, dailyId: dailyCourseId }),
+                body: JSON.stringify({ guessId, dailyId: dailyCourse.courseId }),
                 headers: { "Content-Type": "application/json" }
             });
             if (!res.ok) {
@@ -164,7 +164,7 @@
         <Navbar bind:openStats={openStats}/>
 
         <!-- daily course display -->
-        <DailyCourse dailyCourseId={dailyCourseId} />
+        <DailyCourse />
 
         <!-- course search bar -->
         <SearchBar bind:query={query} guessCourse={guessCourse}/>

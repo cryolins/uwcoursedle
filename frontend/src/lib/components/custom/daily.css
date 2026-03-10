@@ -11,3 +11,16 @@
   align-items: center;
   text-align: center;
 }
+
+.show-ans-container {
+  width: fit-content;
+  max-width: 85%;
+  height: fit-content;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin-bottom: 0.75rem;
+  background-color: var(--color-zinc-400)
+}
+.show-ans-container:hover {
+  background-color: var(--color-zinc-500)
+}

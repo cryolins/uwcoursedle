@@ -4,7 +4,7 @@ import { createContext } from "svelte";
 
 interface LoadedDataContext {
     courseTitles: CourseIdentifiers[]
-    dailyCourseId: string
+    dailyCourse: CourseIdentifiers
     dayGuessKey: string
     guesses: () => GuessedCourse[]
     stats: () => PlayerStats

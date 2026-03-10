@@ -33,11 +33,11 @@
         isSearchBarFocused = false;
         isSearchFocused = false;
     }
-    const fillInSearch = (e: MouseEvent) => {
-        e.stopPropagation();
-        const clickedBtn = e.currentTarget as HTMLElement;
-        const clickedTitle = clickedBtn.parentElement?.id;
-        query = !!clickedTitle ? clickedTitle : query;
+    const fillInSearch = (title: string) => {
+        return (e: MouseEvent) => {
+            e.stopPropagation();
+            query = title;
+        }
     }
     const setFocusTrue = () => {
         isSearchBarFocused = true;
@@ -70,7 +70,7 @@
                                     <ArrowUpLeft />
                                 </div>
                             </button>
-                            <button onclick={fillInSearch} class="absolute top-1 right-1 rounded-full hover:bg-primary/20 text-foreground/80">
+                            <button onclick={fillInSearch(searchResult.title)} class="absolute top-1 right-1 rounded-full hover:bg-primary/20 text-foreground/80">
                                 <ArrowUpLeft />
                             </button>
                         </li>
