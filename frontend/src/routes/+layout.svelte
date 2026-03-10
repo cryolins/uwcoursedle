@@ -3,8 +3,11 @@
 	import favicon from '$lib/assets/uwc-favicon.svg';
 	import { ModeWatcher } from 'mode-watcher';
 	import GameSonner from '$lib/components/custom/GameSonner.svelte';
+	import { dev } from '$app/environment';
+	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 
 	let { children } = $props();
+	injectAnalytics({ mode: dev ? 'development' : 'production' });
 </script>
 
 <svelte:head>
