@@ -67,6 +67,19 @@ div, p, body {
   color: var(--color-black);
 }
 
+/* hide/show buttons styles */
+.show-hide-container {
+  width: fit-content;
+  height: fit-content;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  background-color: var(--color-zinc-400);
+  @apply transition-colors;
+}
+.show-hide-container:hover {
+  background-color: var(--color-zinc-500);
+}
+
 /* guesses area styles */
 .guess-col-headers {
   display: flex;

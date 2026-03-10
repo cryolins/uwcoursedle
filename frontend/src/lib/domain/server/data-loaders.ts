@@ -16,8 +16,8 @@ function loadCoursesMap() {
 export const coursesMap = loadCoursesMap();
 
 // gets daily course using seeded prng in the form of a CourseData object
-export function getDailyCourse(): CourseIdentifiers {
+export function getDailyCourse(): CourseIdentifiers & { subjectNames: string[] } {
     const dailyIndex = getDailyIndex(coursesJson.length);
-    const { courseId, title } = coursesJson[dailyIndex];
-    return { courseId, title };
+    const { courseId, title, subjectNames } = coursesJson[dailyIndex];
+    return { courseId, title, subjectNames };
 }

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Hints from "./Hints.svelte";
 	import HowToPlay from "./HowToPlay.svelte";
     import "./navbar.css";
 	import Stats from "./Stats.svelte";
@@ -15,6 +16,7 @@
     <!-- dialog-opening icons -->
     <div class="icons-container gap-2 sm:gap-4">
         <HowToPlay />
+        <Hints />
         <Stats bind:openStats={openStats} />
     </div>
 </div>

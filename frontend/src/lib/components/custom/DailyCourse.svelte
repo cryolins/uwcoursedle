@@ -13,7 +13,7 @@
     <h2 class="daily-course-text wrap-anywhere">{dailyCourse.courseId}</h2>
 
     {#if hasLost()}
-        <button class="show-ans-container transition-colors" 
+        <button class="show-hide-container show-ans-container" 
         onclick={() => showAns = !showAns}>
             {showAns ? dailyCourse.title : "Show answer"}
         </button>
