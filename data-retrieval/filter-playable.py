@@ -151,13 +151,21 @@ test.to_json("course-desc-test.json", orient="records", indent=2) """
 
 print("replaced select courseIds in descriptions with relevant course description")
 
+# stripping course descs of punctuation before grouping for cleaner grouping of cross-listed courses
+df["strippedDescription"] = df["description"].str.replace(r"\W", "", regex=True)
+print("added a new column for stripped descriptions")
+
 # final collection: group by title and description
 # drop catalog number
-collected_df = df.groupby(["title", "description"]).agg({
+collected_df = df.groupby(["title", "strippedDescription"]).agg({
+    "description": "first", # doesn't matter too much, just pick one type of punctuation
     "courseId": "/".join,
     "subjectName": list,
     "subjectCode": list
 }).reset_index().sort_values("courseId")
+
+# drop strippedDescriptions
+collected_df.drop("strippedDescription", axis=1, inplace=True)
 
 # rename columss
 collected_df.rename(columns={"subjectCode": "subjectCodes", "subjectName": "subjectNames"}, inplace=True)
