@@ -1,3 +1,5 @@
+import { lemmatizer } from "lemmatizer";
+
 // calculates the dot product cosine similarity between two vectors of the same dimensions
 export function cosineSim(a: number[], b: number[]) {
     if (a.length != b.length) {
@@ -18,10 +20,14 @@ export function matchWords(guessTitle: string, dailyTitle: string) {
     const SEPARATORS = /[ ,()–—!:.'-]/;
     const guessWords = guessTitle.split(SEPARATORS).filter(w => !!w);
     const dailyWords = dailyTitle.split(SEPARATORS).filter(w => !!w);
-    //console.log(guessWords, dailyWords);
-    const dailyWordsCounter = new Map<string, number>(dailyWords.map(w => [w.toLowerCase(), 0]));
+    const dailyLemmas = dailyWords.map(w => lemmatizer(w));
 
-    // loop 1: count matching words
+    console.log(dailyLemmas);
+    console.log(guessWords, dailyWords);
+    const dailyWordsCounter = new Map<string, number>(dailyWords.map(w => [w.toLowerCase(), 0]));
+    const dailyLemmasCounter = new Map<string, number>(dailyLemmas.map(w => [w.toLowerCase(), 0]));
+
+    // loop 1/2: count matching/lemma matching words
     let dailyWordCount: number | undefined = undefined;
     for (const word of dailyWords) {
         dailyWordCount = dailyWordsCounter.get(word.toLowerCase());
@@ -29,18 +35,30 @@ export function matchWords(guessTitle: string, dailyTitle: string) {
             dailyWordsCounter.set(word.toLowerCase(), dailyWordCount + 1);
         }
     }
+    let dailyLemmaCount: number | undefined = undefined;
+    for (const lem of dailyLemmas) {
+        dailyLemmaCount = dailyLemmasCounter.get(lem.toLowerCase());
+        if (dailyLemmaCount != undefined) {
+            dailyLemmasCounter.set(lem.toLowerCase(), dailyLemmaCount + 1);
+        }
+    }
 
-    // loop 2: combining into a list of strings: matched strings start with "/m/"
+    // loop 3: combining into a list of strings: matched strings start with "/m/"
     let guessTitleIndex = 0;
     let separatorsBetween = "";
     let returnList: string[] = [];
     for (const word of guessWords) {
         dailyWordCount = dailyWordsCounter.get(word.toLowerCase());
+        const lem = lemmatizer(word);
+        dailyLemmaCount = dailyLemmasCounter.get(lem.toLowerCase());
         if (dailyWordCount) {
             // neither 0 nor undefined
             //console.log(word, dailyWordCount);
             returnList.push("/m/" + word);
             dailyWordsCounter.set(word.toLowerCase(), dailyWordCount - 1);
+        } else if (dailyLemmaCount) {
+            returnList.push("/l/" + word);
+            dailyLemmasCounter.set(lem.toLowerCase(), dailyLemmaCount - 1);
         } else {
             returnList.push(word);
         }

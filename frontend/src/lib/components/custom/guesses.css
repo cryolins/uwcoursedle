@@ -35,3 +35,16 @@
 .matched-animate-in {
   animation: match-gradient 1s ease-out forwards;
 }
+
+@keyframes lemma-gradient {
+  0% {
+    color: white;
+  }
+  100% {
+    color: var(--color-primary2);
+  }
+}
+
+.lemma-animate-in {
+  animation: lemma-gradient 1s ease-out forwards;
+}

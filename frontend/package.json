@@ -47,6 +47,7 @@
 		"@fontsource-variable/instrument-sans": "^5.2.8",
 		"@fontsource-variable/public-sans": "^5.2.7",
 		"@vercel/analytics": "^1.6.1",
+		"lemmatizer": "^0.0.1",
 		"mode-watcher": "^1.1.0"
 	}
 }
