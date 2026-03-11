@@ -21,7 +21,7 @@
     // search bar and guesses states
     let query = $state<string>("");
     let guesses = $state<GuessedCourse[]>([]);
-    let hasWon = $derived(guesses.some(course => course.simScore === 1));
+    let hasWon = $derived(guesses.some(course => course.courseId === dailyCourse.courseId));
     let hasLost = $derived(guesses.length >= MAX_DAILY_GUESSES && !hasWon);
     let canEnd = $state<boolean>(false); // state to prevent triggering counting player stats on mount
 
@@ -132,7 +132,7 @@
         }
     });
     $effect(() => {
-        if (hasLost) { // hasWon is sole dependency
+        if (hasLost) { // hasLost is sole dependency
             untrack(() => {
                 if (canEnd) {
                     // update stats
@@ -179,7 +179,7 @@
             </div>
 
             {#each guesses.toSorted(guessComparator) as guess (guess.guessNum)}
-                <GuessBlock guess={guess} />
+                <GuessBlock guess={guess} guessesLength={guesses.length} />
             {/each}
             
         </div>

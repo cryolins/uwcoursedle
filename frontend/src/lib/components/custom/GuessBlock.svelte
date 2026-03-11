@@ -3,12 +3,15 @@
 	import { onDestroy, onMount } from "svelte";
 	import GuessTitleText from "./GuessTitleText.svelte";
     import "./guesses.css";
+	import { getLoadedDataContext } from "$lib/domain/contexts";
 
     interface GuessBlockProps {
         guess: GuessedCourse
+        guessesLength: number
     }
-    let { guess }: GuessBlockProps = $props();
+    let { guess, guessesLength }: GuessBlockProps = $props();
     let countPercent = $state(0);
+    let { dailyCourse } = getLoadedDataContext();
 
     onMount(() => {
         const startTime = performance.now();
@@ -29,7 +32,8 @@
 
 </script>
 
-<ul class="guess-block">
+<ul class={`guess-block ${ guess.courseId === dailyCourse.courseId ? "bg-word-match/20" 
+                            : (guess.guessNum === guessesLength ? "bg-zinc-700" : "bg-zinc-900") }`}>
     <p class="w-fit">{guess.guessNum}</p>
     <p class="course-title">
         <GuessTitleText titleFrags={guess.titleFrags} courseId={guess.courseId} />
