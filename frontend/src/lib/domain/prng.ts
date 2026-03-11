@@ -13,7 +13,10 @@ function splitmix32(seed: number) {
 
 export function getDailyIndex(jsonLength: number) {
     const today = new Date();
-    const dailySeed = (today.getFullYear() * 10000) + ((today.getMonth() + 1) * 100) + (today.getDate());
+    const todayStr = today.toLocaleDateString("en-CA", {
+        year: "numeric", month: "2-digit", day:"2-digit", timeZone: "America/Toronto"
+    }).replaceAll("-", "");
+    const dailySeed = Number(todayStr);
     const dailyPRNG = splitmix32(dailySeed);
     const prngRes = dailyPRNG();
     return Math.min(Math.floor(prngRes * jsonLength), jsonLength - 1);
