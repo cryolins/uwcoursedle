@@ -21,7 +21,7 @@
                     Welcome to <span class="text-primary2">UW</span>Coursedle! Your goal is to guess the correct course title based off the course code in <span class="font-bold underline">{MAX_DAILY_GUESSES}</span> tries.
                 </p>
                 <p>
-                    These courses are based off those listed on the University of Waterloo’s <a href="https://uwaterloo.ca/academic-calendar/undergraduate-studies/catalog#/home" class="underline">undergraduate calendar</a>.
+                    These courses are based off those listed on the University of Waterloo’s <a href="https://uwaterloo.ca/academic-calendar/undergraduate-studies/catalog#/home" class="underline" target="_blank" rel="noopener noreferrer">undergraduate calendar</a>.
                     <br/><span class="italic">Last updated: Feb 2026 (2025-2026 academic year)</span>.
                 </p>
                 <p>
@@ -30,7 +30,7 @@
                     The similarity score represents how semantically close the topic of the course is to your guess.
                 </p>
                 <p>
-                    Have fun! - Pei Lin He   (<a href="https://github.com/cryolins/uwcoursedle" class="underline">view UWCoursedle on GitHub</a>)
+                    Have fun! - Pei Lin He   (<a href="https://github.com/cryolins/uwcoursedle" class="underline" target="_blank" rel="noopener noreferrer">view UWCoursedle on GitHub</a>)
                 </p>
             </div>
         </ScrollArea>
