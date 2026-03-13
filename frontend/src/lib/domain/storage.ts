@@ -1,6 +1,6 @@
 function getDayNum(dayOffset = 0): string {
     const now = new Date();
-    const day = new Date(now.getTime() - (dayOffset * 24 * 60 * 60 * 1000));
+    const day = new Date(now.getTime() + (dayOffset * 24 * 60 * 60 * 1000));
     const dayStr = day.toLocaleDateString("en-CA", {
         year: "numeric", month: "2-digit", day:"2-digit", timeZone: "America/Toronto"
     }).replaceAll("-", "");
