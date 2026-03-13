@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { setLoadedDataContext } from '$lib/domain/contexts';
-	import { cosineSim, matchWords, scaleCosineSim } from '$lib/domain/sim-calcs';
 	import { type GuessedCourse } from '$lib/interfaces/course-data';
     import SearchBar from '$lib/components/custom/SearchBar.svelte'
 	import GuessBlock from '$lib/components/custom/GuessBlock.svelte';
@@ -11,7 +10,7 @@
 	import { type PlayerStats } from '$lib/interfaces/stats';
 	import { MAX_DAILY_GUESSES } from '$lib/config';
 	import { toast } from 'svelte-sonner';
-	import type { PageData, PageProps } from './$types';
+	import type { PageProps } from './$types';
 	import type { GuessResponse } from '$lib/interfaces/guess-server';
 
     // load in json data

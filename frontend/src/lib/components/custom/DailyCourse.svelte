@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { MAX_DAILY_GUESSES } from "$lib/config";
 	import { getLoadedDataContext } from "$lib/domain/contexts";
-	import type { CourseIdentifiers } from "$lib/interfaces/course-data";
     import "./daily.css";
     let { dailyCourse, hasLost } = getLoadedDataContext();
 

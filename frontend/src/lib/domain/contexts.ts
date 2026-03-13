@@ -1,4 +1,4 @@
-import type { CourseData, CourseIdentifiers, GuessedCourse } from "$lib/interfaces/course-data";
+import type { CourseIdentifiers, GuessedCourse } from "$lib/interfaces/course-data";
 import type { PlayerStats } from "$lib/interfaces/stats";
 import { createContext } from "svelte";
 

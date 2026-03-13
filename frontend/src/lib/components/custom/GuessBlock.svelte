@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { GuessedCourse } from "$lib/interfaces/course-data";
-	import { onDestroy, onMount } from "svelte";
+	import { onMount } from "svelte";
 	import GuessTitleText from "./GuessTitleText.svelte";
     import "./guesses.css";
 	import { getLoadedDataContext } from "$lib/domain/contexts";

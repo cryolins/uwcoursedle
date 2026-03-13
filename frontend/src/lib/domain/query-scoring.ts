@@ -1,7 +1,6 @@
-// scores courses based on:
-
 import type { CourseIdentifiers, ScoredCourse } from "$lib/interfaces/course-data";
 
+// scores courses based on:
 /*
 - highest if exact match
 - then if title starts with query

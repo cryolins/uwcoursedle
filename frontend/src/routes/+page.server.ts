@@ -1,7 +1,7 @@
 import { coursesMap, getDailyCourse } from "$lib/domain/server/data-loaders";
 import { getTodayGuessKey, getYesterdayGuessKey } from "$lib/domain/storage";
 import type { CourseData, CourseIdentifiers } from "$lib/interfaces/course-data";
-import type { Actions, PageServerLoad } from "./$types";
+import type { PageServerLoad } from "./$types";
 
 function courseDataToIdentifiers(courseData: CourseData): CourseIdentifiers{
     return { courseId: courseData.courseId, title: courseData.title}

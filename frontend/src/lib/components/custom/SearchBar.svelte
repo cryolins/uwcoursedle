@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { clickOutside } from "$lib/domain/click-outside.svelte";
 	import { courseToScoredCourse } from "$lib/domain/query-scoring";
-	import { matchWords } from "$lib/domain/sim-calcs";
 	import { ArrowUpLeft } from "@lucide/svelte";
 	import ScrollArea from "../ui/scroll-area/scroll-area.svelte";
-	import type { CourseData } from "$lib/interfaces/course-data";
 	import { getLoadedDataContext } from "$lib/domain/contexts";
     import "./search-bar.css";
 	import { MIN_CHARS_TO_SEARCH } from "$lib/config";
