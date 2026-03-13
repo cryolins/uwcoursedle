@@ -21,14 +21,15 @@
                     Welcome to <span class="text-primary2">UW</span>Coursedle! Your goal is to guess the correct course title based off the course code in <span class="font-bold underline">{MAX_DAILY_GUESSES}</span> tries.
                 </p>
                 <p>
-                    Browse through course titles to search for a course to make your guess! Once you make a guess, some details about it will pop up in the list of your guesses (sorted by similarity).
+                    Browse through course titles to search for a course to make your guess!
                 </p>
                 <p>
-                    The <span class="text-word-match">green</span> text in your guess show the words with an exact match between your guess and the actual course name. 
+                    The <span class="text-word-match">green</span> text in your guess info show the words with an exact match between your guess and the actual course name. 
                     The similarity score represents how semantically close the topic of the course is to your guess.
                 </p>
                 <p>
-                    Hints are available by clicking the lightbulb icon on the top right of the play window and opening up the hints menu.
+                    <span class="font-bold">Hints</span> are available in the hints menu by clicking the lightbulb icon on the top right corner.
+                    A game will usually need at least a hint or two, so feel free to use them!
                 </p>
                 <p>
                     Note: these courses are based off those listed on the University of Waterloo’s <a href="https://uwaterloo.ca/academic-calendar/undergraduate-studies/catalog#/home" class="underline" target="_blank" rel="noopener noreferrer">undergraduate calendar</a>.

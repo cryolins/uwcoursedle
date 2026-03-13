@@ -11,10 +11,12 @@
         if (currentWord.length > longests[1].length) { return [longests[0], currentWord]; }
         return longests;
     }, ["", ""]);
+    const titleShape = dailyCourse.title.replaceAll(/\w/g, "_");
 
     let showSubj = $state(false);
     let showLongest = $state(false);
     let showSecondLongest = $state(false);
+    let showShape = $state(false);
 
 </script>
  
@@ -33,7 +35,14 @@
                 <h2 class="text-xl">Subject area(s)</h2>
                 <button class="show-hide-container max-w-full" 
                 onclick={() => showSubj = !showSubj}>
-                    {showSubj ? dailyCourse.subjectNames.join(", ") : "Show hint"}
+                    {showSubj ? dailyCourse.subjectNames.join(" / ") : "Show hint"}
+                </button>
+
+                <h2 class="text-xl">Title shape</h2>
+                <p>(Title but letters and numbers are replaced by underscores)</p>
+                <button class="show-hide-container max-w-full" 
+                onclick={() => showShape = !showShape}>
+                    <h6>{showShape ? titleShape : "Show hint"}</h6>
                 </button>
                 
                 <h2 class="text-xl">Longest word</h2>
