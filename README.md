@@ -9,7 +9,7 @@ Browse through course titles to search for a course to make your guess. Once you
  - The green text in your guess show the words with an exact match between your guess and the actual course name. 
  - The similarity score represents how semantically close the topic of the course is to your guess. 
 	 - 	Due to short/imprecise descriptions of some courses, similarity scoring in them may be less accurate, but should still give a general idea
- - Hints are available by clicking the lightbulb icon on the top right of the play window and opening up the hints menu.
+ - Clues are available by clicking the lightbulb icon on the top right of the play window and opening up the clues menu.
 
 Have fun!
 ## Built with

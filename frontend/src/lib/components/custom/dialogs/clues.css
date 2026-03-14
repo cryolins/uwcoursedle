@@ -1,0 +1,13 @@
+.clues-trigger {
+    display: flex;
+    overflow-wrap: break-word;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    background-color: var(--color-primary2);
+    color: var(--color-zinc-800);
+    border-radius: var(--radius-md);
+}
+.clues-trigger:hover {
+    background-color: var(--color-primary2-dark);
+}

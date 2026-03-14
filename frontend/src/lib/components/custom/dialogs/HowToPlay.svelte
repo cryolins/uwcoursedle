@@ -1,13 +1,13 @@
 <script lang="ts">
     import * as Dialog from "$lib/components/ui/dialog/index.js";
     import { CircleQuestionMark } from '@lucide/svelte';
-	import ScrollArea from "../ui/scroll-area/scroll-area.svelte";
+	import ScrollArea from "../../ui/scroll-area/scroll-area.svelte";
 	import { MAX_DAILY_GUESSES } from "$lib/config";
 </script>
  
 <Dialog.Root>
     <Dialog.Trigger >
-        <CircleQuestionMark class="size-10"/>
+        <CircleQuestionMark class="size-10 text-white hover:text-zinc-300 transition-colors"/>
     </Dialog.Trigger>
 
     <Dialog.Content class="dialog-sizing">
@@ -28,8 +28,8 @@
                     The similarity score represents how semantically close the topic of the course is to your guess.
                 </p>
                 <p>
-                    <span class="font-bold">Hints</span> are available in the hints menu by clicking the lightbulb icon on the top right corner.
-                    A game will usually need at least a hint or two, so feel free to use them!
+                    <span class="font-bold">Clues</span> are available in the clues menu by clicking the button.
+                    A game will usually need at least a clue or two, so feel free to use them!
                 </p>
                 <p>
                     Note: these courses are based off those listed on the University of Waterloo’s <a href="https://uwaterloo.ca/academic-calendar/undergraduate-studies/catalog#/home" class="underline" target="_blank" rel="noopener noreferrer">undergraduate calendar</a>.

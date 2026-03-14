@@ -1,7 +1,7 @@
 <script lang="ts">
     import * as Dialog from "$lib/components/ui/dialog/index.js";
     import { ChartColumn } from '@lucide/svelte';
-	import ScrollArea from "../ui/scroll-area/scroll-area.svelte";
+	import ScrollArea from "../../ui/scroll-area/scroll-area.svelte";
     import { STATS_KEY } from "$lib/domain/storage";
 	import { onMount } from "svelte";
     import flameImg from "$lib/assets/flame.png";
@@ -46,7 +46,7 @@
  
 <Dialog.Root bind:open={openStats} onOpenChange={(val) => (openStats = val)}>
     <Dialog.Trigger >
-        <ChartColumn class="size-10"/>
+        <ChartColumn class="size-10 text-white hover:text-zinc-300 transition-colors"/>
     </Dialog.Trigger>
 
     <Dialog.Content class="dialog-sizing">
