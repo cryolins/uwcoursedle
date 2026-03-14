@@ -7,10 +7,10 @@ function getDayNum(dayOffset = 0): string {
     return dayStr;
 }
 export function getTodayGuessKey(): string {
-    return "guess-" + getDayNum();
+    return "uwcoursedleguess-" + getDayNum();
 }
 export function getYesterdayGuessKey(): string {
-    return "guess-" + getDayNum(-1);
+    return "uwcoursedleguess-" + getDayNum(-1);
 }
 
-export const STATS_KEY = "uwc-stats";
+export const STATS_KEY = "uwcoursedlestats";
