@@ -25,7 +25,7 @@
         <Lightbulb class="size-10"/>
     </Dialog.Trigger>
 
-    <Dialog.Content class="w-xl max-w-9/10">
+    <Dialog.Content class="dialog-sizing">
         <Dialog.Header>
             <Dialog.Title><h1>Hints</h1></Dialog.Title>
         </Dialog.Header>

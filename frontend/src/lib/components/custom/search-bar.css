@@ -33,6 +33,7 @@
   margin-top: 0.375rem;
 }
 
-.dropdown-scrollarea-border {
-    border: 2px solid var(--color-primary2);
+.dropdown-scrollarea-style {
+  border: 2px solid var(--color-primary2);
+  background-color: var(--background);
 }

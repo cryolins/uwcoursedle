@@ -50,7 +50,7 @@
     onfocus={setFocusTrue} oninput={setFocusTrue} onblur={() => isSearchBarFocused = false}/>
 
     <div class="absolute dropdown-container" hidden={!(isSearchFocused || isSearchBarFocused)}>
-        <ScrollArea class="w-full rounded-sm dropdown-scrollarea-border">
+        <ScrollArea class="w-full rounded-sm dropdown-scrollarea-style">
             <ol class="max-h-[40vh]">
             
                 {#if query.length <= MIN_CHARS_TO_SEARCH}

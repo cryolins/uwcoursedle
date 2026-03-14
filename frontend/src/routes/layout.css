@@ -9,7 +9,7 @@
 @theme inline {
   --color-primary2: #f2d368;
   --color-primary2-dark: #E7bc28;
-  --color-word-match: #57ea83;;
+  --color-word-match: #57ea83;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -78,6 +78,13 @@ div, p, body {
 }
 .show-hide-container:hover {
   background-color: var(--color-zinc-500);
+}
+
+/* dialog styles */
+.dialog-sizing {
+  width: var(--container-xl);
+  max-width: 95%;
+  max-height: 95%;
 }
 
 /* guesses area styles */
