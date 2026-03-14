@@ -14,7 +14,7 @@
 
     // search bar states
     let { query=$bindable(), guessCourse }: SearchProps = $props();
-    const { courseTitles } = getLoadedDataContext();
+    const { courseTitles, guessedCourseIds } = getLoadedDataContext();
     let isSearchBarFocused = $state(false);
     let isSearchFocused = $state(false);
     //let query = $state("");
@@ -61,7 +61,7 @@
                     {#each searchResults as searchResult}
                         <li class="relative" id={searchResult.courseId}>
                             <button onclick={guessCourseAndBlur} class="search-result search-result-hover transition-colors">
-                                <p>{searchResult.title}</p>
+                                <p class={guessedCourseIds().includes(searchResult.courseId) ? "text-zinc-500" : ""}>{searchResult.title}</p>
 
                                 <!-- dummy box to take up space to leave room for real arrow-->
                                 <div class="opacity-0">

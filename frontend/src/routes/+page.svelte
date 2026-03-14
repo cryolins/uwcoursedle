@@ -20,6 +20,7 @@
     // search bar and guesses states
     let query = $state<string>("");
     let guesses = $state<GuessedCourse[]>([]);
+    let guessedCourseIds = $derived(guesses.map(c => c.courseId));
     let hasWon = $derived(guesses.some(course => course.courseId === dailyCourse.courseId));
     let hasLost = $derived(guesses.length >= MAX_DAILY_GUESSES && !hasWon);
     let canEnd = $state<boolean>(false); // state to prevent triggering counting player stats on mount
@@ -33,7 +34,7 @@
     // context 
     setLoadedDataContext({ 
         courseTitles, dailyCourse, dayGuessKey,
-        guesses: () => guesses, stats: () => stats,
+        guesses: () => guesses, guessedCourseIds: () => guessedCourseIds, stats: () => stats,
         hasWon: () => hasWon, hasLost: () => hasLost
     });
 
@@ -45,6 +46,8 @@
         const clickedBtn = e.currentTarget as HTMLElement;
         const guessId = clickedBtn.parentElement?.id;
         if (guessId) {
+            if (guessedCourseIds.includes(guessId)) { return; }
+            
             const res = await fetch("/guess", {
                 method: "POST",
                 body: JSON.stringify({ guessId, dailyId: dailyCourse.courseId }),

@@ -7,6 +7,7 @@ interface LoadedDataContext {
     dailyCourse: CourseIdentifiers & { subjectNames: string[] }
     dayGuessKey: string
     guesses: () => GuessedCourse[]
+    guessedCourseIds: () => string[]
     stats: () => PlayerStats
     hasWon: () => boolean
     hasLost: () => boolean
