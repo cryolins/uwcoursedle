@@ -24,7 +24,7 @@
         }
         function addClueEmojis(guessEmojisArr: string[]) {
             for (const i of clueIndices().toSorted((a, b) => b - a)) {
-                if (i >= 0 && i < 10) { guessEmojisArr.splice(i, 0, "💡"); }
+                if (i >= 0 && i < guesses().length) { guessEmojisArr.splice(i, 0, "💡"); }
             }
             return guessEmojisArr;
         }
