@@ -8,6 +8,7 @@ interface LoadedDataContext {
     dayGuessKey: string
     guesses: () => GuessedCourse[]
     guessedCourseIds: () => string[]
+    clueIndices: () => number[]
     stats: () => PlayerStats
     hasWon: () => boolean
     hasLost: () => boolean

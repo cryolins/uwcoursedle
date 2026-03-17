@@ -13,7 +13,7 @@
 	import { toast } from "svelte-sonner";
 
     let { openStats=$bindable() } : { openStats?: boolean } = $props();
-    let { stats, dayGuessKey, hasWon, hasLost, guesses } = getLoadedDataContext();
+    let { stats, dayGuessKey, hasWon, hasLost, guesses, clueIndices } = getLoadedDataContext();
     let copyInput = $state<HTMLInputElement>();
     let hasPlayed = $derived(hasWon() || hasLost());
 
@@ -22,7 +22,13 @@
             const emojis = ["🟥", "🟧", "🟨", "🟩", "✅"];
             return emojis[Math.floor(guess.simScore * 4)];
         }
-        return guessesArr.map(g => mapToEmoji(g)).join("");
+        function addClueEmojis(guessEmojisArr: string[]) {
+            for (const i of clueIndices().toSorted((a, b) => b - a)) {
+                if (i >= 0 && i < 10) { guessEmojisArr.splice(i, 0, "💡"); }
+            }
+            return guessEmojisArr;
+        }
+        return addClueEmojis(guessesArr.map(g => mapToEmoji(g))).join("");
     }
 
     function getDateString() {

@@ -8,7 +8,7 @@
 	import Navbar from '$lib/components/custom/Navbar.svelte';
 	import DailyCourse from '$lib/components/custom/DailyCourse.svelte';
 	import { type PlayerStats } from '$lib/interfaces/stats';
-	import { MAX_DAILY_GUESSES } from '$lib/config';
+	import { CLUE_COUNT, MAX_DAILY_GUESSES } from '$lib/config';
 	import { toast } from 'svelte-sonner';
 	import type { PageProps } from './$types';
 	import type { GuessResponse } from '$lib/interfaces/guess-server';
@@ -21,6 +21,7 @@
     // search bar and guesses states
     let query = $state<string>("");
     let guesses = $state<GuessedCourse[]>([]);
+    let clueIndices = $state<number[]>(Array(CLUE_COUNT).fill(-1)); // index of use, in order of clue menu list
     let guessedCourseIds = $derived(guesses.map(c => c.courseId));
     let hasWon = $derived(guesses.some(course => course.courseId === dailyCourse.courseId));
     let hasLost = $derived(guesses.length >= MAX_DAILY_GUESSES && !hasWon);
@@ -36,7 +37,7 @@
     setLoadedDataContext({ 
         courseTitles, dailyCourse, dayGuessKey,
         guesses: () => guesses, guessedCourseIds: () => guessedCourseIds, stats: () => stats,
-        hasWon: () => hasWon, hasLost: () => hasLost
+        clueIndices: () => clueIndices, hasWon: () => hasWon, hasLost: () => hasLost
     });
 
     // small functions
@@ -71,14 +72,15 @@
     // onMounts and effects
     onMount(() => {
         // fetch guesses and stats from localStorage
-        const savedGuesses = localStorage.getItem(dayGuessKey);
-        guesses = savedGuesses ? JSON.parse(savedGuesses) : [];
+        const savedGuessesStr = localStorage.getItem(dayGuessKey);
+        guesses = savedGuessesStr ? JSON.parse(savedGuessesStr).guesses : [];
+        clueIndices = savedGuessesStr ? JSON.parse(savedGuessesStr).clues : Array(CLUE_COUNT).fill(-1);
         const savedStats = localStorage.getItem(STATS_KEY);
         stats = savedStats ? JSON.parse(savedStats) : stats;
 
         // fetch yesterday data to decide if streak exists
         const yesterdayGuessesStr = localStorage.getItem(yesterdayGuessKey);
-        const yesterdayGuesses: GuessedCourse[] = yesterdayGuessesStr ? JSON.parse(yesterdayGuessesStr) :  []
+        const yesterdayGuesses: GuessedCourse[] = yesterdayGuessesStr ? JSON.parse(yesterdayGuessesStr).guesses :  []
         const wonYesterday = yesterdayGuesses && yesterdayGuesses.some(course => course.simScore === 1);
         if (!wonYesterday) { 
             stats.streak = hasWon ? 1 : 0; 
@@ -89,7 +91,8 @@
         const storageHandler = (e: StorageEvent) => {
             if (e.key === dayGuessKey && e.newValue) {
                 // match current render's dayGuessKey
-                guesses = JSON.parse(e.newValue);
+                guesses = JSON.parse(e.newValue).guesses;
+                clueIndices = JSON.parse(e.newValue).clues || Array(CLUE_COUNT).fill(-1);
             } else if (e.key === STATS_KEY && e.newValue) {
                 stats = JSON.parse(e.newValue);
             }
@@ -103,9 +106,11 @@
 
     // localStorage syncing
     $effect(() => {
-        if (guesses) {
+        if (guesses || clueIndices) {
             // use loaded guess key on render so players can still play across midnight
-            localStorage.setItem(dayGuessKey, JSON.stringify(guesses));
+            localStorage.setItem(dayGuessKey, JSON.stringify({
+                guesses, clues: clueIndices
+            }));
         }
     });
     $effect(() => {

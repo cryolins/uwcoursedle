@@ -4,8 +4,11 @@
 	import ScrollArea from "../../ui/scroll-area/scroll-area.svelte";
 	import { getLoadedDataContext } from "$lib/domain/contexts";
     import "./clues.css";
+	import { CLUE_HEADERS, CLUE_NOTES } from "./clues-data";
+	import { CLUE_COUNT } from "$lib/config";
 
-    const { dailyCourse } = getLoadedDataContext();
+    // get consts of interest
+    const { dailyCourse, clueIndices, guessedCourseIds } = getLoadedDataContext();
     const words = dailyCourse.title.match(/\w+/g) || [];
     const [longest, secondLongest] = words.reduce<[string, string]>((longests, currentWord) => {
         if (currentWord.length > longests[0].length) { return [currentWord, longests[0]]; }
@@ -14,10 +17,9 @@
     }, ["", ""]);
     const titleShape = dailyCourse.title.replaceAll(/\w/g, "_");
 
-    let showSubj = $state(false);
-    let showLongest = $state(false);
-    let showSecondLongest = $state(false);
-    let showShape = $state(false);
+    // put into a list to iterate through
+    const clueVals = [dailyCourse.subjectNames.join(" / "), titleShape, longest, secondLongest];
+    let showClues = $derived(clueIndices().map(i => i >= 0));
 
 </script>
  
@@ -35,30 +37,17 @@
 
         <ScrollArea type="always" class="dialog-inner-scroll-size">
             <div class="flex flex-col w-full gap-2">
-                <h2 class="text-xl">Subject area(s)</h2>
-                <button class="show-hide-container max-w-full" 
-                onclick={() => showSubj = !showSubj}>
-                    {showSubj ? dailyCourse.subjectNames.join(" / ") : "Show clue"}
-                </button>
-
-                <h2 class="text-xl">Title shape</h2>
-                <p>(Title but letters and numbers are replaced by underscores)</p>
-                <button class="show-hide-container max-w-full" 
-                onclick={() => showShape = !showShape}>
-                    <h6>{showShape ? titleShape : "Show clue"}</h6>
-                </button>
-                
-                <h2 class="text-xl">Longest word</h2>
-                <button class="show-hide-container max-w-full" 
-                onclick={() => showLongest = !showLongest}>
-                    {showLongest ? longest : "Show clue"}
-                </button>
-
-                <h2 class="text-xl">Second longest word</h2>
-                <button class="show-hide-container max-w-full" 
-                onclick={() => showSecondLongest = !showSecondLongest}>
-                    {showSecondLongest ? secondLongest : "Show clue"}
-                </button>
+                {#each Array(CLUE_COUNT) as _, i}
+                     <!-- content here -->
+                    <h2 class="text-xl">{CLUE_HEADERS[i]}</h2>
+                    {#if CLUE_NOTES[i]}
+                        <p>{CLUE_NOTES[i]}</p>
+                    {/if}
+                    <button class="show-hide-container max-w-full" 
+                    onclick={() => clueIndices()[i] = guessedCourseIds().length}>
+                        {showClues[i] ? clueVals[i] : "Show clue"}
+                    </button>
+                {/each}
             </div>
         </ScrollArea>
         
