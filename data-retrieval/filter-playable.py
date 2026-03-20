@@ -16,6 +16,8 @@ FILTER_EXCEPTIONS = ["SCI211", "BME587", "BME588", "BME589", "ECON361", "ECON457
                      "ECE198", "GBDA201", "GBDA301", "GBDA202", "GBDA302", "GBDA204", "PHYS263",
                      "THPERF400", "THPERF248", "GEOG481", "PLAN481", "PD5", "COMMST302", "DAC303"
                      ] #notable exceptions to the filter that can be kept
+COURSE_ID_PATTERN = re.compile(r"([A-Z]{2,}) ?([0-9]{1,3}[A-Z]?)")
+COURSE_ID_PATTERN_UNGROUPED = re.compile(r"[A-Z]{2,} ?[0-9]{1,3}[A-Z]?")
 
 # filter and view function
 # just a function to save down queries I used for analyzing the dataframe
@@ -86,6 +88,9 @@ print("filtered transfer/X courses")
 df = df[~(df["description"] == "")]
 print("filtered empty description courses")
 
+# filter by correct courseId pattern
+df = df[df["courseId"].str.fullmatch(COURSE_ID_PATTERN_UNGROUPED)]
+
 # filter out bad keywords
 df = df[(~df["title"].str.lower().str.contains(KW_REGEX, regex=True))
         | (df["title"].str.lower().str.contains("topics")) # filter topics later
@@ -114,8 +119,6 @@ print("filtered by \"topics\" keyword")
 
 # in preparation for replacing course codes in descriptions, 
 # ensure course codes separated by a space aren't anymore
-COURSE_ID_PATTERN = re.compile(r"([A-Z]{2,}) ?([0-9]{1,3}[A-Z]?)")
-COURSE_ID_PATTERN_UNGROUPED = re.compile(r"[A-Z]{2,} ?[0-9]{1,3}[A-Z]?")
 df["description"] = df["description"].str.replace(
     COURSE_ID_PATTERN, r"\1\2", regex=True
 )
