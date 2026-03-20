@@ -1,11 +1,13 @@
 import pandas as pd
 import re
+from pathlib import Path
 
 # constants
 INPUT_FILE = "first-pass.json"
 SUBJECTS_FILE = "ucal-subjects.json"
 OUTPUT_FILE = "courses-source.json"
-PLAYABLE_OUT_FILE = "playable-list.json" # TODO: move to frontend server file when done testing
+root_path = Path(__file__).resolve().parents[1]
+PLAYABLE_OUT_FILE = root_path / "frontend" / "src" / "lib" / "domain" / "server" / "playable-list.json" 
 FILTER_KEYWORDS = ["special ", "seminar", "capstone", "reading", "ensemble", "thesis",
                    "project", "research", "session", "work-term", "directed", "co-operative",
                    "essay", "abroad", "independent", "production participation", "field course",
