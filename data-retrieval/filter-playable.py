@@ -5,6 +5,7 @@ import re
 INPUT_FILE = "first-pass.json"
 SUBJECTS_FILE = "ucal-subjects.json"
 OUTPUT_FILE = "courses-source.json"
+PLAYABLE_OUT_FILE = "playable-list.json" # TODO: move to frontend server file when done testing
 FILTER_KEYWORDS = ["special ", "seminar", "capstone", "reading", "ensemble", "thesis",
                    "project", "research", "session", "work-term", "directed", "co-operative",
                    "essay", "abroad", "independent", "production participation", "field course",
@@ -176,5 +177,21 @@ print("collected by title & description")
 collected_df.to_json(OUTPUT_FILE, orient="records", indent=2)
 print(f"saved to json: available at {OUTPUT_FILE}")
 
-print("final step done!\n")
 collected_df.info()
+
+print("filtering for fun courses (eliminating annoying to guess ones)")
+
+# eliminate courses with rare words
+word_counts = collected_df["title"].str.lower().str.split(r"[ ,()–—!:.'-]").explode("title").value_counts()
+word_counts = word_counts[(word_counts.index.str.len() > 3) | (word_counts <= 100)]
+
+rare_filter_df = collected_df[["courseId", "title"]]
+rare_filter_df = rare_filter_df.assign(title=rare_filter_df["title"].str.lower().str.split(r"[ ,()–—!:.'-]")).explode("title")
+rare_filter_df = pd.merge(rare_filter_df, word_counts, how="left", on="title")
+rare_filter_df = rare_filter_df.fillna(1)
+rare_filter_df = rare_filter_df.groupby("courseId").agg({"count": "sum"}).reset_index()
+rare_filter_df = rare_filter_df[rare_filter_df["count"] > 3]
+rare_filter_df["courseId"].to_json(PLAYABLE_OUT_FILE, orient="records", indent=2)
+print("obtained list of course codes of courses with decent keywords")
+
+print(f"saved to json: available at {PLAYABLE_OUT_FILE}")
