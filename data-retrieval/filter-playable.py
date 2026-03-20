@@ -176,7 +176,7 @@ collected_df.rename(columns={"subjectCode": "subjectCodes", "subjectName": "subj
 print("collected by title & description")
 
 # save to json
-# collected_df.to_json(OUTPUT_FILE, orient="records", indent=2)
+collected_df.to_json(OUTPUT_FILE, orient="records", indent=2)
 print(f"saved to json: available at {OUTPUT_FILE}")
 
 print("final step done!\n")
