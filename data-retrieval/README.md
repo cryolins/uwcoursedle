@@ -5,6 +5,7 @@ Welcome to the data retrieval section of this project! Here is where I get cours
 **(The order to run python scripts to generate `courses.json` in frontend $lib)**
 1. Run `uwuc_scraper.py` to scrape subjects from the undergraduate calendar. (I wanted to keep this to exactly the subjects found on the calendar so I didn't want to just call the API again) Should output to `ucal_subjects.json`
 2. Run `fetch-source.py` to call the UWaterloo API to get the courses. This requires a `UW_API_KEY` environment variable in a `.env` file. Should output to `first-pass.json`
-3. Run `filter-playable.py` to filter and aggregate courses into each playable course. Should output to `courses-source.json`
+3. Run `filter-playable.py` to filter and aggregate courses into each playable course. Should output to `courses-source.json` and `playable-list.json`
 4. Run `prep-embeddings.py` to get the embeddings for each course. Requires a `HUGGINGFACE_API_KEY` environment variable in a `.env` file (key obtained from https://huggingface.co/).
-There should now be a `courses.json` file in `$lib/domain/server`!
+There should now be a `courses.json` file in `$lib/domain/server`
+5. Run `filter-daily-by-vecs.py` to further filter the playables list and output to the `playable-list.json` in `$lib/domain/server`

@@ -7,7 +7,7 @@ INPUT_FILE = "first-pass.json"
 SUBJECTS_FILE = "ucal-subjects.json"
 OUTPUT_FILE = "courses-source.json"
 root_path = Path(__file__).resolve().parents[1]
-PLAYABLE_OUT_FILE = root_path / "frontend" / "src" / "lib" / "domain" / "server" / "playable-list.json" 
+PLAYABLE_OUT_FILE = "playable-list.json"
 FILTER_KEYWORDS = ["special ", "seminar", "capstone", "reading", "ensemble", "thesis",
                    "project", "research", "session", "work-term", "directed", "co-operative",
                    "essay", "abroad", "independent", "production participation", "field course",
@@ -195,8 +195,9 @@ rare_filter_df = rare_filter_df.assign(title=rare_filter_df["title"].str.lower()
 rare_filter_df = pd.merge(rare_filter_df, word_counts, how="left", on="title")
 rare_filter_df = rare_filter_df.fillna(1)
 rare_filter_df = rare_filter_df.groupby("courseId").agg({"count": "sum"}).reset_index()
-rare_filter_df = rare_filter_df[rare_filter_df["count"] > 3]
-rare_filter_df["courseId"].to_json(PLAYABLE_OUT_FILE, orient="records", indent=2)
+rare_filter_df = rare_filter_df[rare_filter_df["count"] >= 10]
 print("obtained list of course codes of courses with decent keywords")
+print(rare_filter_df.info())
 
+rare_filter_df["courseId"].to_json(PLAYABLE_OUT_FILE, orient="records", indent=2)
 print(f"saved to json: available at {PLAYABLE_OUT_FILE}")
