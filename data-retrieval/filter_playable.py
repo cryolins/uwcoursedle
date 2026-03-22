@@ -229,14 +229,27 @@ print("added new columns for stripped descriptions")
 # group by title and description,
 # drop catalog number
 
+def union_list_series(series):
+    s = set()
+    for item_list in series:
+        if isinstance(item_list, list):
+            s.update(item_list)
+    return sorted(list(s))
+
 collected_df = df.sort_values(
-    by="title"
-).groupby(["titleNoNum", "strippedDescription"]).agg({
-    "title": "first",
+    by=["subjectCode", "title"]
+).groupby(["title", "strippedDescription"]).agg({
     "description": "first", # doesn't matter too much, just pick one type of punctuation
     "courseId": "/".join,
     "subjectName": list,
-    "subjectCode": list
+    "subjectCode": list,
+    "titleNoNum": "first"
+}).reset_index().groupby(["titleNoNum", "strippedDescription"]).agg({
+    "title": "first",
+    "description": "first",
+    "courseId": "first", # here, take the first courseId instead
+    "subjectName": union_list_series,
+    "subjectCode": union_list_series
 }).reset_index()
 
 # rename columss
