@@ -1,10 +1,13 @@
 import pandas as pd
 import re
+from pathlib import Path
 
 # constants
 INPUT_FILE = "first-pass.json"
 SUBJECTS_FILE = "ucal-subjects.json"
 OUTPUT_FILE = "courses-source.json"
+root_path = Path(__file__).resolve().parents[1]
+PLAYABLE_OUT_FILE = "playable-list.json"
 FILTER_KEYWORDS = ["special ", "seminar", "capstone", "reading", "ensemble", "thesis",
                    "project", "research", "session", "work-term", "directed", "co-operative",
                    "essay", "abroad", "independent", "production participation", "field course",
@@ -15,6 +18,8 @@ FILTER_EXCEPTIONS = ["SCI211", "BME587", "BME588", "BME589", "ECON361", "ECON457
                      "ECE198", "GBDA201", "GBDA301", "GBDA202", "GBDA302", "GBDA204", "PHYS263",
                      "THPERF400", "THPERF248", "GEOG481", "PLAN481", "PD5", "COMMST302", "DAC303"
                      ] #notable exceptions to the filter that can be kept
+COURSE_ID_PATTERN = re.compile(r"([A-Z]{2,}) ?([0-9]{1,3}[A-Z]?)")
+COURSE_ID_PATTERN_UNGROUPED = re.compile(r"[A-Z]{2,} ?[0-9]{1,3}[A-Z]?")
 
 # filter and view function
 # just a function to save down queries I used for analyzing the dataframe
@@ -85,6 +90,9 @@ print("filtered transfer/X courses")
 df = df[~(df["description"] == "")]
 print("filtered empty description courses")
 
+# filter by correct courseId pattern
+df = df[df["courseId"].str.fullmatch(COURSE_ID_PATTERN_UNGROUPED)]
+
 # filter out bad keywords
 df = df[(~df["title"].str.lower().str.contains(KW_REGEX, regex=True))
         | (df["title"].str.lower().str.contains("topics")) # filter topics later
@@ -113,8 +121,6 @@ print("filtered by \"topics\" keyword")
 
 # in preparation for replacing course codes in descriptions, 
 # ensure course codes separated by a space aren't anymore
-COURSE_ID_PATTERN = re.compile(r"([A-Z]{2,}) ?([0-9]{1,3}[A-Z]?)")
-COURSE_ID_PATTERN_UNGROUPED = re.compile(r"[A-Z]{2,} ?[0-9]{1,3}[A-Z]?")
 df["description"] = df["description"].str.replace(
     COURSE_ID_PATTERN, r"\1\2", regex=True
 )
@@ -176,5 +182,22 @@ print("collected by title & description")
 collected_df.to_json(OUTPUT_FILE, orient="records", indent=2)
 print(f"saved to json: available at {OUTPUT_FILE}")
 
-print("final step done!\n")
 collected_df.info()
+
+print("filtering for fun courses (eliminating annoying to guess ones)")
+
+# eliminate courses with rare words
+word_counts = collected_df["title"].str.lower().str.split(r"[ ,()–—!:.'-]").explode("title").value_counts()
+word_counts = word_counts[(word_counts.index.str.len() > 3) | (word_counts <= 100)]
+
+rare_filter_df = collected_df[["courseId", "title"]]
+rare_filter_df = rare_filter_df.assign(title=rare_filter_df["title"].str.lower().str.split(r"[ ,()–—!:.'-]")).explode("title")
+rare_filter_df = pd.merge(rare_filter_df, word_counts, how="left", on="title")
+rare_filter_df = rare_filter_df.fillna(1)
+rare_filter_df = rare_filter_df.groupby("courseId").agg({"count": "sum"}).reset_index()
+rare_filter_df = rare_filter_df[rare_filter_df["count"] >= 10]
+print("obtained list of course codes of courses with decent keywords")
+print(rare_filter_df.info())
+
+rare_filter_df["courseId"].to_json(PLAYABLE_OUT_FILE, orient="records", indent=2)
+print(f"saved to json: available at {PLAYABLE_OUT_FILE}")
