@@ -71,6 +71,70 @@ def find_bad_kws(df: pd.DataFrame):
 
     return
 
+# a function to find duplicate course names that are common to remove them past a threshold
+def find_bad_fullmatches(df: pd.DataFrame):
+    """
+    input: df: a pandas dataframe containing the columns:
+    title
+    description
+    courseId
+    subjectNames
+    subjectCodes
+    strippedDescription
+    titleNoNum
+    """
+
+    # remove numbers to compare more as intended
+    sharedTitleCounts = df["titleNoNum"].value_counts()
+    # print(sharedTitleCounts.head(30))
+    df = pd.merge(df, sharedTitleCounts, how="left", on="titleNoNum")
+    df["count"] = df["count"].fillna(1)
+
+    # separate into three df categories and process them separately
+    BAD_THRESHOLD = 4
+    WARN_THRESHOLD = 3
+    EXCEPTION_KWS = ["century"] # things change a lot across centuries ;)
+    EXCEPTION_KWS_REGEX = "|".join(EXCEPTION_KWS)
+    bad_df = df[(df["count"] > BAD_THRESHOLD)
+                & ~(df["title"].str.lower().str.contains(EXCEPTION_KWS_REGEX, regex=True))] # very many
+    warn_df = df[(df["count"] <= BAD_THRESHOLD) & (df["count"] > WARN_THRESHOLD)
+                 & ~(df["title"].str.lower().str.contains(EXCEPTION_KWS_REGEX, regex=True))] # in the middle, needs more careful processing
+    good_df = df[(df["count"] <= WARN_THRESHOLD)
+                 | (df["title"].str.lower().str.contains(EXCEPTION_KWS_REGEX, regex=True))] # not bad fullmatches, keep without processing    
+
+    # process badly many ones: just take the 1st of the type, or else most descriptive
+    bad_df["descLen"] = bad_df["description"].str.len()
+    bad_df = bad_df.sort_values(
+        by=["title", "descLen"], ascending=[True, False]
+    ).groupby("titleNoNum").agg({
+        "title": "first",
+        "description": "first",
+        "courseId": "first",
+        "subjectNames": "first",
+        "subjectCodes": "first"
+    }).reset_index()
+    # print(bad_df)
+
+    # process moderately-duplicated courses
+    # group by same exact title, choosing most descriptive
+    warn_df["descLen"] = warn_df["description"].str.len()
+    warn_df = warn_df.sort_values(
+        by="descLen", ascending=False
+    ).groupby("title").agg({ # key difference: group by exact title instead of stripped titleNoNum
+        "description": "first",
+        "courseId": "first",
+        "subjectNames": "first",
+        "subjectCodes": "first"
+    }).reset_index()
+    # print(warn_df)
+
+    # concat together
+    comb_df = pd.concat([bad_df, warn_df, good_df], join="inner", ignore_index=True)
+    comb_df.sort_values("courseId", inplace=True)
+    # print(comb_df.info())
+    return comb_df
+    
+
 df = pd.read_json(INPUT_FILE)
 sub_df = pd.read_json(SUBJECTS_FILE)
 
@@ -157,26 +221,32 @@ test.to_json("course-desc-test.json", orient="records", indent=2) """
 
 print("replaced select courseIds in descriptions with relevant course description")
 
-# stripping course descs of punctuation before grouping for cleaner grouping of cross-listed courses
+# stripping course titles and descs of punctuation before grouping for cleaner grouping of cross-listed courses
 df["strippedDescription"] = df["description"].str.replace(r"\W", "", regex=True)
-print("added a new column for stripped descriptions")
+df["titleNoNum"] = df["title"].str.replace(r"[^a-zA-Z]", "", regex=True).str.strip().str.lower()
+print("added new columns for stripped descriptions")
 
-# final collection: group by title and description
+# group by title and description,
 # drop catalog number
-collected_df = df.groupby(["title", "strippedDescription"]).agg({
+
+collected_df = df.sort_values(
+    by="title"
+).groupby(["titleNoNum", "strippedDescription"]).agg({
+    "title": "first",
     "description": "first", # doesn't matter too much, just pick one type of punctuation
     "courseId": "/".join,
     "subjectName": list,
     "subjectCode": list
-}).reset_index().sort_values("courseId")
-
-# drop strippedDescriptions
-collected_df.drop("strippedDescription", axis=1, inplace=True)
+}).reset_index()
 
 # rename columss
 collected_df.rename(columns={"subjectCode": "subjectCodes", "subjectName": "subjectNames"}, inplace=True)
 
 print("collected by title & description")
+
+# filter off duplicated fullmatch titles (excluding numbers) per function above
+collected_df = find_bad_fullmatches(collected_df)
+print("collected by duplicate titles when titles were stripped")
 
 # save to json
 collected_df.to_json(OUTPUT_FILE, orient="records", indent=2)
