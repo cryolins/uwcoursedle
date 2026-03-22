@@ -23,7 +23,7 @@
     let guesses = $state<GuessedCourse[]>([]);
     let clueIndices = $state<number[]>(Array(CLUE_COUNT).fill(-1)); // index of use, in order of clue menu list
     let guessedCourseIds = $derived(guesses.map(c => c.courseId));
-    let hasWon = $derived(guesses.some(course => course.courseId === dailyCourse.courseId));
+    let hasWon = $derived(guesses.some(course => course.courseId === dailyCourse.courseId || course.simScore === 1));
     let hasLost = $derived(guesses.length >= MAX_DAILY_GUESSES && !hasWon);
     let canEnd = $state<boolean>(false); // state to prevent triggering counting player stats on mount
 
