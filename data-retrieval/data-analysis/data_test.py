@@ -23,7 +23,7 @@ def sim_scale(dot_prod):
     return 0.35 * math.atan(14 * ((dot_prod + 1) / 2 - 0.6)) + 0.512
 
 # get json source file locations
-rootPath = Path(__file__).resolve().parents[1]
+rootPath = Path(__file__).resolve().parents[2]
 jsonPath = rootPath / "frontend" / "src" / "lib" / "domain" / "server" / "courses.json"
 
 # get data from json
