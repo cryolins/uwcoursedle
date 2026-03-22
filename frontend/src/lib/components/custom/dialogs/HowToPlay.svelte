@@ -28,10 +28,6 @@
                     The similarity score represents how semantically close the topic of the course is to your guess.
                 </p>
                 <p>
-                    <span class="font-bold">Clues</span> are available in the clues menu by clicking the button.
-                    A game will usually need at least a clue or two, so feel free to use them!
-                </p>
-                <p>
                     Note: these courses are based off those listed on the University of Waterloo’s <a href="https://uwaterloo.ca/academic-calendar/undergraduate-studies/catalog#/home" class="underline" target="_blank" rel="noopener noreferrer">undergraduate calendar</a>.
                     <br/><span class="italic">Last updated: March 2026 (2025-2026 academic year)</span>.
                 </p>
