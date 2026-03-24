@@ -56,6 +56,10 @@ minCoursesTitles = [data[i]["courseId"] + ": " + data[i]["title"] for i in argmi
 print(f"min courses: {minCoursesTitles}")
 print("")
 
+print("shortest course titles:\n----------------------------------------------------------------")
+shortest_titles = df.sort_values("title", key=lambda x: x.str.len())[["courseId", "title"]].head(10)
+print(shortest_titles)
+
 # plotting scores and scaled scores
 scores_freq, scores_edges = np.histogram(scores_matrix, bins="auto")
 scaled_freq, scaled_edges = np.histogram(scaled_matrix, bins="auto")

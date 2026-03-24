@@ -11,7 +11,7 @@ PLAYABLE_OUT_FILE = "playable-list.json"
 FILTER_KEYWORDS = ["special ", "seminar", "capstone", "reading", "ensemble", "thesis",
                    "project", "research", "session", "work-term", "directed", "co-operative",
                    "essay", "abroad", "independent", "production participation", "field course",
-                   "apprenticeship", "practicum", "proposal"]
+                   "apprenticeship", "practicum", "proposal", "waterloo"]
                 # "topics" is filtered separately
 KW_REGEX = "|".join(FILTER_KEYWORDS)
 FILTER_EXCEPTIONS = ["SCI211", "BME587", "BME588", "BME589", "ECON361", "ECON457", "AE400", "COMM431",
@@ -153,6 +153,9 @@ print("filtered transfer/X courses")
 # filter out empty string courses since those can't be embedded well
 df = df[~(df["description"] == "")]
 print("filtered empty description courses")
+
+# filter out short words that can't be guessed ;-;
+df = df[df["title"].str.len() > 3]
 
 # filter by correct courseId pattern
 df = df[df["courseId"].str.fullmatch(COURSE_ID_PATTERN_UNGROUPED)]
