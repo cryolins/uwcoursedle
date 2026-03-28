@@ -1,3 +1,5 @@
+import { SEPARATORS } from "$lib/config";
+
 // calculates the dot product cosine similarity between two vectors of the same dimensions
 export function cosineSim(a: number[], b: number[]) {
     if (a.length != b.length) {
@@ -15,7 +17,6 @@ export function scaleCosineSim(cosineSim: number) {
 
 // checks what words are shared/matched between guessed title and daily title
 export function matchWords(guessTitle: string, dailyTitle: string) {
-    const SEPARATORS = /[ ,()–—!:.'-]/;
     const guessWords = guessTitle.split(SEPARATORS).filter(w => !!w);
     const dailyWords = dailyTitle.split(SEPARATORS).filter(w => !!w);
     //console.log(guessWords, dailyWords);

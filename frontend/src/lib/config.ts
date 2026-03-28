@@ -3,3 +3,4 @@ export const MAX_DAILY_GUESSES = 10;
 export const SITE_URL = "https://uwcoursedle.vercel.app/";
 export const MIN_CHARS_TO_SEARCH = 3;
 export const CLUE_COUNT = 4;
+export const SEPARATORS = /[ ,()–—!:.'-]/;
