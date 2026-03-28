@@ -92,7 +92,7 @@ def find_bad_fullmatches(df: pd.DataFrame):
 
     # separate into three df categories and process them separately
     BAD_THRESHOLD = 4
-    WARN_THRESHOLD = 3
+    WARN_THRESHOLD = 2
     EXCEPTION_KWS = ["century"] # things change a lot across centuries ;)
     EXCEPTION_KWS_REGEX = "|".join(EXCEPTION_KWS)
     bad_df = df[(df["count"] > BAD_THRESHOLD)
@@ -272,7 +272,7 @@ collected_df.info()
 
 print("filtering for fun courses (eliminating annoying to guess ones)")
 
-# eliminate courses with rare words
+# getting counts 
 word_counts = collected_df["title"].str.lower().str.split(r"[ ,()–—!:.'-]").explode("title").value_counts()
 word_counts = word_counts[(word_counts.index.str.len() > 3) | (word_counts <= 100)]
 
@@ -280,10 +280,21 @@ rare_filter_df = collected_df[["courseId", "title"]]
 rare_filter_df = rare_filter_df.assign(title=rare_filter_df["title"].str.lower().str.split(r"[ ,()–—!:.'-]")).explode("title")
 rare_filter_df = pd.merge(rare_filter_df, word_counts, how="left", on="title")
 rare_filter_df = rare_filter_df.fillna(1)
-rare_filter_df = rare_filter_df.groupby("courseId").agg({"count": "sum"}).reset_index()
-rare_filter_df = rare_filter_df[rare_filter_df["count"] >= 10]
-print("obtained list of course codes of courses with decent keywords")
-print(rare_filter_df.info())
 
-rare_filter_df["courseId"].to_json(PLAYABLE_OUT_FILE, orient="records", indent=2)
+# aggregating into max and sum and merging the back
+count_max_df = rare_filter_df.groupby("courseId").agg({"count": "max"}).reset_index()
+count_sum_df = rare_filter_df.groupby("courseId").agg({"count": "sum"}).reset_index()
+count_max_df.rename(columns={"count": "countMax"}, inplace=True)
+count_sum_df.rename(columns={"count": "countSum"}, inplace=True)
+id_counts_df = pd.merge(count_max_df, count_sum_df, how="inner", on="courseId")
+
+# performing filter: based on flat sum rarity and proportionally of most common word
+MIN_COUNT_SUM = 18
+id_counts_df = id_counts_df[(id_counts_df["countSum"] >= MIN_COUNT_SUM)
+                            & ((id_counts_df["countMax"] * 1.5 <= id_counts_df["countSum"])
+                               | (id_counts_df["countSum"] - id_counts_df["countMax"] >= MIN_COUNT_SUM))]
+
+print("obtained list of course codes of courses with decent keywords")
+print(id_counts_df.info())
+id_counts_df["courseId"].to_json(PLAYABLE_OUT_FILE, orient="records", indent=2)
 print(f"saved to json: available at {PLAYABLE_OUT_FILE}")
