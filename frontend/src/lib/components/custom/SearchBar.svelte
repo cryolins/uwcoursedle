@@ -45,7 +45,8 @@
 </script>
 
 <!-- course search field -->
-<div class="outer-container-sizing relative text-frame-style" role="button" use:clickOutside onclick_outside={() => isSearchFocused = false}>
+<div class="outer-container-sizing relative text-frame-style overflow-visible" role="button" use:clickOutside onclick_outside={() => isSearchFocused = false}>
+    <div class="absolute pulse-frame"></div>
     <input type="text" placeholder="Enter a guess..." bind:value={query} class="search-frame-sizing"
     onfocus={setFocusTrue} oninput={setFocusTrue} onblur={() => isSearchBarFocused = false}/>
 

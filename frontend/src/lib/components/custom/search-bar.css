@@ -8,6 +8,22 @@
   padding: 0.5rem;
 }
 
+@keyframes outline-pulse {
+  0% {
+    outline: solid 3px var(--color-primary2);
+  }
+  100% {
+    outline: solid 12px transparent;
+  }
+}
+
+.pulse-frame {
+  pointer-events: none;
+  inset: 0;
+  border-radius: 0.25rem;  
+  animation: outline-pulse 1.75s ease-out;
+}
+
 .search-result {
   display: flex;
   width: 100%;
