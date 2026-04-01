@@ -25,9 +25,7 @@
  
 <Dialog.Root>
     <Dialog.Trigger >
-        <div class="clues-trigger transition-colors">
-            <Lightbulb /> Clues
-        </div>
+        <Lightbulb class="size-10 text-white hover:text-zinc-300 transition-colors"/>
     </Dialog.Trigger>
 
     <Dialog.Content class="dialog-sizing">

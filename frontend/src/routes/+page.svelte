@@ -12,7 +12,6 @@
 	import { toast } from 'svelte-sonner';
 	import type { PageProps } from './$types';
 	import type { GuessResponse } from '$lib/interfaces/guess-server';
-	import Clues from '$lib/components/custom/dialogs/Clues.svelte';
 
     // load in json data
     let { data }: PageProps = $props();
@@ -173,9 +172,6 @@
 
         <!-- daily course display -->
         <DailyCourse />
-
-        <!-- clues button -->
-        <Clues />
 
         <!-- course search bar -->
         <SearchBar bind:query={query} guessCourse={guessCourse}/>

@@ -2,6 +2,7 @@
 	import HowToPlay from "./dialogs/HowToPlay.svelte";
     import "./navbar.css";
 	import Stats from "./dialogs/Stats.svelte";
+	import Clues from "./dialogs/Clues.svelte";
 
     let { openStats=$bindable() } : { openStats?: boolean } = $props();
 
@@ -14,6 +15,7 @@
 
     <!-- dialog-opening icons -->
     <div class="icons-container gap-2 sm:gap-4">
+        <Clues />
         <HowToPlay />
         <Stats bind:openStats={openStats} />
     </div>
